@@ -6,6 +6,7 @@ sudo sed -i 's/= 100$/= 4096/' /etc/mysql/mariadb.conf.d/50-server.cnf
 linha=`awk '{if ($0 == "[mysqld]") {print NR;}}' /etc/mysql/mariadb.conf.d/50-server.cnf`
 sudo sed -i "$[linha+1] i\innodb_file_per_table = on" /etc/mysql/mariadb.conf.d/50-server.cnf
 sudo service mysql restart
+if [ $? -ne 0 ]; then echo "NECOS: error"; fi
 
 
 sudo mysql --user=root <<_EOF_
