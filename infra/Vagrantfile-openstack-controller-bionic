@@ -73,6 +73,9 @@ Vagrant.configure("2") do |config|
     echo "NECOS: apt upgrading"
     bash necos/infra/apt.sh
 
+    echo "NECOS: disabling locale msg"
+    bash necos/infra/locale.sh
+
     echo "NECOS: coping /etc/hosts"
     sudo cp necos/infra/hosts /etc/
 
