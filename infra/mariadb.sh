@@ -10,7 +10,10 @@ if [ $? -ne 0 ]; then echo "NECOS: error"; fi
 
 
 sudo mysql --user=root <<_EOF_
-UPDATE mysql.user SET Password=PASSWORD('secret') WHERE User='root';
+DROP USER 'root'@'localhost';
+CREATE USER 'root'@'%' IDENTIFIED BY 'secret';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+--UPDATE mysql.user SET Password=PASSWORD('secret') WHERE User='root';
 DELETE FROM mysql.user WHERE User='';
 DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
 DROP DATABASE IF EXISTS test;
