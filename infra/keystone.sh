@@ -1,4 +1,4 @@
-sudo mysql --user=root <<_EOF_
+sudo mysql --user=root -psecret <<_EOF_
 CREATE DATABASE keystone;
 GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'localhost' IDENTIFIED BY 'secret';
 GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'%' IDENTIFIED BY 'secret';
