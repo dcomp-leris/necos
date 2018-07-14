@@ -78,5 +78,20 @@ Vagrant.configure("2") do |config|
 
     echo "NECOS: installing chrony"
     bash necos/infra/chrony.sh
+
+    echo "NECOS: installing mariadb"
+    bash necos/infra/mariadb.sh
+
+    echo "NECOS: installing rabbitmq"
+    bash necos/infra/rabbitmq.sh
+
+    echo "NECOS: installing memcached"
+    bash necos/infra/memcached.sh
+
+    echo "NECOS: installing etcd"
+    bash necos/infra/etcd.sh
+
+    echo "NECOS: installing keystone"
+    bash necos/infra/keystone.sh
   SHELL
 end
