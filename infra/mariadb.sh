@@ -17,13 +17,19 @@ if [ $? -ne 0 ]; then echo "NECOS: error"; fi
 #FLUSH PRIVILEGES;
 #_EOF_
 
-sudo mysql_secure_installation >> mariadb.log 2>> mariadb-error.log <<_EOF_
-
-Y
-secret
-secret
-Y
-Y
-Y
-Y
+sudo mysql --user=root <<_EOF_
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY 'secret';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'secret';
+FLUSH PRIVILEGES;
 _EOF_
+
+#sudo mysql_secure_installation >> mariadb.log 2>> mariadb-error.log <<_EOF_
+#
+#Y
+#secret
+#secret
+#Y
+#Y
+#Y
+#Y
+#_EOF_
