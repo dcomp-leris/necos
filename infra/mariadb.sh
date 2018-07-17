@@ -1,4 +1,5 @@
-sudo apt -qy install mariadb-server python-pymysql >> apt-mariadb.log 2>> apt-mariadb-error.log
+sudo apt -qy install mariadb-server >> apt-mariadb.log 2>> apt-mariadb-error.log
+sudo apt -qy install python-pymysql >> apt-pymysql.log 2>> apt-pymysql-error.log
 
 sudo sed -i 's/127.0.0.1/10.0.0.11/' /etc/mysql/mariadb.conf.d/50-server.cnf
 sudo sed -i 's/^#max_connections/max_connections/' /etc/mysql/mariadb.conf.d/50-server.cnf
