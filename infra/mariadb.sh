@@ -4,6 +4,7 @@ sudo apt -qy install python-pymysql >> apt-pymysql.log 2>> apt-pymysql-error.log
 sudo sed -i 's/127.0.0.1/10.0.0.11/' /etc/mysql/mariadb.conf.d/50-server.cnf
 sudo sed -i 's/^#max_connections/max_connections/' /etc/mysql/mariadb.conf.d/50-server.cnf
 sudo sed -i 's/= 100$/= 4096/' /etc/mysql/mariadb.conf.d/50-server.cnf
+sudo sed -i 's/utf8mb4/utf8/' /etc/mysql/mariadb.conf.d/50-server.cnf
 #linha=`awk '{if ($0 == "[mysqld]") {print NR;}}' /etc/mysql/mariadb.conf.d/50-server.cnf`
 #sudo sed -i "$[linha+1] i\innodb_file_per_table = on" /etc/mysql/mariadb.conf.d/50-server.cnf
 sudo service mysql restart
