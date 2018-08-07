@@ -6,9 +6,8 @@
 10.0.0.32       compute2
 # block1
 10.0.0.41       block1
-# object1
+# object1 and object2
 10.0.0.51       object1
-# object2
 10.0.0.52       object2
 
 # The following lines are desirable for IPv6 capable hosts
