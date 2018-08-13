@@ -4,22 +4,14 @@ GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'localhost' IDENTIFIED BY 'secret';
 GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'%' IDENTIFIED BY 'secret';
 _EOF_
 
-#echo "passou aqui"
-#openstack user create --domain default --password secret glance >> glance.log 2>> glance-error.log
-#openstack role add --project service --user glance admin >> glance.log 2>> glance-error.log
-#openstack service create --name glance --description "OpenStack Image" image >> glance.log 2>> glance-error.log
-#openstack endpoint create --region RegionOne image public http://controller:9292 >> glance.log 2>> glance-error.log
-#openstack endpoint create --region RegionOne image internal http://controller:9292 >> glance.log 2>> glance-error.log
-#openstack endpoint create --region RegionOne image admin http://controller:9292 >> glance.log 2>> glance-error.log
-#echo "saiu aqui"
-echo "passou aqui"
-openstack user create --domain default --password secret glance
-openstack role add --project service --user glance admin
-openstack service create --name glance --description "OpenStack Image" image
-openstack endpoint create --region RegionOne image public http://controller:9292
-openstack endpoint create --region RegionOne image internal http://controller:9292
-openstack endpoint create --region RegionOne image admin http://controller:9292
-echo "saiu aqui"
+source necos/infra/admin-openrc
+
+openstack user create --domain default --password secret glance >> glance.log 2>> glance-error.log
+openstack role add --project service --user glance admin >> glance.log 2>> glance-error.log
+openstack service create --name glance --description "OpenStack Image" image >> glance.log 2>> glance-error.log
+openstack endpoint create --region RegionOne image public http://controller:9292 >> glance.log 2>> glance-error.log
+openstack endpoint create --region RegionOne image internal http://controller:9292 >> glance.log 2>> glance-error.log
+openstack endpoint create --region RegionOne image admin http://controller:9292 >> glance.log 2>> glance-error.log
 
 sudo apt -qy install glance >> apt-glance.log 2>> apt-glance-error.log
 
