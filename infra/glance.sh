@@ -57,6 +57,6 @@ if [ $? -ne 0 ]; then echo "NECOS: error"; fi
 sudo service glance-api restart
 if [ $? -ne 0 ]; then echo "NECOS: error"; fi
 
-#wget -q http://download.cirros-cloud.net/0.4.0/cirros-0.4.0-x86_64-disk.img
+wget -q http://download.cirros-cloud.net/0.4.0/cirros-0.4.0-x86_64-disk.img >> wgetcirros.log 2>> wgetcirros-error.log
 
-#openstack image create "cirros" --file cirros-0.4.0-x86_64-disk.img --disk-format qcow2 --container-format bare --public >> cirros.log 2>> cirros-error.log
+openstack image create "cirros" --file cirros-0.4.0-x86_64-disk.img --disk-format qcow2 --container-format bare --public >> cirros.log 2>> cirros-error.log
