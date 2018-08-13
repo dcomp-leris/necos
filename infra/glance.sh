@@ -4,12 +4,14 @@ GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'localhost' IDENTIFIED BY 'secret';
 GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'%' IDENTIFIED BY 'secret';
 _EOF_
 
+echo "passou aqui"
 openstack user create --domain default --password secret glance >> glance.log 2>> glance-error.log
 openstack role add --project service --user glance admin >> glance.log 2>> glance-error.log
 openstack service create --name glance --description "OpenStack Image" image >> glance.log 2>> glance-error.log
 openstack endpoint create --region RegionOne image public http://controller:9292 >> glance.log 2>> glance-error.log
 openstack endpoint create --region RegionOne image internal http://controller:9292 >> glance.log 2>> glance-error.log
 openstack endpoint create --region RegionOne image admin http://controller:9292 >> glance.log 2>> glance-error.log
+echo "saiu aqui"
 
 sudo apt -qy install glance >> apt-glance.log 2>> apt-glance-error.log
 
