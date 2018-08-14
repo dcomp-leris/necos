@@ -50,6 +50,9 @@ Vagrant.configure("2") do |config|
       echo "NECOS: installing glance"
       bash necos/infra/glance.sh
 
+      echo "NECOS: installing nova"
+      bash necos/infra/nova.sh
+
       echo "NECOS: moving log files"
       bash necos/infra/move.sh
     SHELL
