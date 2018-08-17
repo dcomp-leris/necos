@@ -1,3 +1,4 @@
+sudo apt -qy install nova-common >> apt-nova-common.log 2>> apt-nova-common-error.log
 sudo apt -qy install nova-compute >> apt-nova-compute.log 2>> apt-nova-compute-error.log
 
 HOST_IP=`hostname -I | cut -d " " -f 2`
@@ -46,3 +47,4 @@ sudo sed -i "$[linhaplacementnova+8] i\password = secret" /etc/nova/nova.conf
 sudo sed -i 's/kvm/qemu/' /etc/nova/nova-compute.conf
 
 sudo service nova-compute restart
+if [ $? -ne 0 ]; then echo "NECOS: error"; fi
