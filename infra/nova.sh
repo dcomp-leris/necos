@@ -74,6 +74,8 @@ sudo sed -i "$[linhaplacementnova+6] i\auth_url = http://controller:5000/v3" /et
 sudo sed -i "$[linhaplacementnova+7] i\username = placement" /etc/nova/nova.conf
 sudo sed -i "$[linhaplacementnova+8] i\password = secret" /etc/nova/nova.conf
 
+sudo sed -i 's/^#discover_hosts_in_cells_interval = -1/discover_hosts_in_cells_interval = 300/' /etc/nova/nova.conf
+
 sudo su -s /bin/sh -c "nova-manage api_db sync" nova >> nova-manage.log 2>> nova-manage-error.log
 
 sudo su -s /bin/sh -c "nova-manage cell_v2 map_cell0" nova >> nova-manage.log 2>> nova-manage-error.log
