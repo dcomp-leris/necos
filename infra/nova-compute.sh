@@ -2,7 +2,6 @@ sudo apt -qy install nova-common >> apt-nova-common.log 2>> apt-nova-common-erro
 sudo apt -qy install nova-compute >> apt-nova-compute.log 2>> apt-nova-compute-error.log
 
 HOST_IP=$1
-echo "host ip ${HOST_IP}"
 linhadefaultnova=`sudo awk '{if ($0 == "[DEFAULT]") {print NR;}}' /etc/nova/nova.conf`
 sudo sed -i "$[linhadefaultnova+4] i\transport_url = rabbit://openstack:secret@controller" /etc/nova/nova.conf
 sudo sed -i "$[linhadefaultnova+5] i\my_ip = ${HOST_IP}" /etc/nova/nova.conf
