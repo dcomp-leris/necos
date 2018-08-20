@@ -95,4 +95,40 @@ Vagrant.configure("2") do |config|
   end
 ############### end compute1 block ###############
 
+############### start compute2 block ###############
+  config.vm.define "compute2" do |compute2|
+    compute2.vm.box = "ubuntu/bionic64"
+    compute2.vm.hostname = 'compute2'
+    compute2.vm.network "public_network", ip: "10.0.0.32"
+    compute2.vm.network "public_network"
+
+    compute2.vm.provider "virtualbox" do |vb|
+      vb.memory = "2048"
+      vb.cpus = "2"
+    end
+  
+    compute2.vm.provision "shell", inline: <<-SHELL
+      echo "NECOS: git cloning necos.git"
+      git clone https://github.com/dcomp-leris/necos.git --quiet
+      if [ $? -ne 0 ]; then echo "NECOS: error"; fi
+      chown -R vagrant.vagrant necos
+
+      echo "NECOS: apt upgrading"
+      bash necos/infra/apt.sh
+
+      echo "NECOS: coping /etc/hosts"
+      sudo cp necos/infra/hosts /etc/
+
+      echo "NECOS: installing chrony"
+      bash necos/infra/chrony-client.sh
+
+      echo "NECOS: installing nova"
+      bash necos/infra/nova-compute.sh 10.0.0.32
+
+      echo "NECOS: moving log files"
+      bash necos/infra/move.sh
+    SHELL
+  end
+############### end compute2 block ###############
+
 end
