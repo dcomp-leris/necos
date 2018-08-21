@@ -50,9 +50,9 @@ sudo sed -i "$[linhaauthtokennova+7] i\username = nova" /etc/nova/nova.conf
 sudo sed -i "$[linhaauthtokennova+8] i\password = secret" /etc/nova/nova.conf
 
 linhavncnova=`sudo awk '{if ($0 == "[vnc]") {print NR;}}' /etc/nova/nova.conf`
-sudo sed -i "$[linhavncnova+1] i\server_listen = 10.0.0.11" /etc/nova/nova.conf
-sudo sed -i "$[linhavncnova+2] i\server_proxyclient_address = 10.0.0.11" /etc/nova/nova.conf
-#sudo sed -i "$[linhavncnova+3] i\enabled = true" /etc/nova/nova.conf
+sudo sed -i "$[linhavncnova+1] i\enabled = True" /etc/nova/nova.conf
+sudo sed -i "$[linhavncnova+2] i\server_listen = 10.0.0.11" /etc/nova/nova.conf
+sudo sed -i "$[linhavncnova+3] i\server_proxyclient_address = 10.0.0.11" /etc/nova/nova.conf
 
 linhaglancenova=`sudo awk '{if ($0 == "[glance]") {print NR;}}' /etc/nova/nova.conf`
 sudo sed -i "$[linhaglancenova+1] i\api_servers = http://controller:9292" /etc/nova/nova.conf
@@ -75,6 +75,8 @@ sudo sed -i "$[linhaplacementnova+7] i\username = placement" /etc/nova/nova.conf
 sudo sed -i "$[linhaplacementnova+8] i\password = secret" /etc/nova/nova.conf
 
 sudo sed -i 's/^#discover_hosts_in_cells_interval = -1/discover_hosts_in_cells_interval = 300/' /etc/nova/nova.conf
+
+sudo sed -i 's/^enable = False/#enable = False/' /etc/nova/nova.conf
 
 sudo su -s /bin/sh -c "nova-manage api_db sync" nova >> nova-manage.log 2>> nova-manage-error.log
 
