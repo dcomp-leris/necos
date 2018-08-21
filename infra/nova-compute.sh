@@ -35,7 +35,7 @@ sudo sed -i "$[linhaoslonova+1] i\lock_path = /var/lib/nova/tmp" /etc/nova/nova.
 sudo sed -i 's/^log_dir = \/var\/log\/nova/#log_dir = \/var\/log\/nova/' /etc/nova/nova.conf
 
 linhaplacementnova=`sudo awk '{if ($0 == "[placement]") {print NR;}}' /etc/nova/nova.conf`
-sudo sed -i "$[linhaplacementnova+1] i\os_region_name = RegionOne" /etc/nova/nova.conf
+sudo sed -i "$[linhaplacementnova+1] i\region_name = RegionOne" /etc/nova/nova.conf
 sudo sed -i "$[linhaplacementnova+2] i\project_domain_name = Default" /etc/nova/nova.conf
 sudo sed -i "$[linhaplacementnova+3] i\project_name = service" /etc/nova/nova.conf
 sudo sed -i "$[linhaplacementnova+4] i\auth_type = password" /etc/nova/nova.conf
