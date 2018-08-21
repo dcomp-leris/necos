@@ -9,10 +9,10 @@ sudo sed -i "$[linhadefaultnova+6] i\use_neutron = True" /etc/nova/nova.conf
 sudo sed -i "$[linhadefaultnova+7] i\firewall_driver = nova.virt.firewall.NoopFirewallDriver" /etc/nova/nova.conf
 
 linhavncnova=`sudo awk '{if ($0 == "[vnc]") {print NR;}}' /etc/nova/nova.conf`
-sudo sed -i "$[linhavncnova+1] i\enabled = True" /etc/nova/nova.conf
-sudo sed -i "$[linhavncnova+2] i\server_listen = 0.0.0.0" /etc/nova/nova.conf
-sudo sed -i "$[linhavncnova+3] i\server_proxyclient_address = ${HOST_IP}" /etc/nova/nova.conf
-sudo sed -i "$[linhavncnova+4] i\snovncproxy_base_url = http://controller:6080/vnc_auto.html" /etc/nova/nova.conf
+sudo sed -i "$[linhavncnova+1] i\server_listen = 0.0.0.0" /etc/nova/nova.conf
+sudo sed -i "$[linhavncnova+2] i\server_proxyclient_address = ${HOST_IP}" /etc/nova/nova.conf
+sudo sed -i "$[linhavncnova+3] i\snovncproxy_base_url = http://controller:6080/vnc_auto.html" /etc/nova/nova.conf
+#sudo sed -i "$[linhavncnova+4] i\enabled = True" /etc/nova/nova.conf
 
 sudo sed -i 's/#auth_strategy = keystone/auth_strategy = keystone/' /etc/nova/nova.conf
 

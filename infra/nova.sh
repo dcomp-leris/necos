@@ -50,9 +50,9 @@ sudo sed -i "$[linhaauthtokennova+7] i\username = nova" /etc/nova/nova.conf
 sudo sed -i "$[linhaauthtokennova+8] i\password = secret" /etc/nova/nova.conf
 
 linhavncnova=`sudo awk '{if ($0 == "[vnc]") {print NR;}}' /etc/nova/nova.conf`
-sudo sed -i "$[linhavncnova+1] i\enabled = true" /etc/nova/nova.conf
-sudo sed -i "$[linhavncnova+2] i\server_listen = 10.0.0.11" /etc/nova/nova.conf
-sudo sed -i "$[linhavncnova+3] i\server_proxyclient_address = 10.0.0.11" /etc/nova/nova.conf
+sudo sed -i "$[linhavncnova+1] i\server_listen = 10.0.0.11" /etc/nova/nova.conf
+sudo sed -i "$[linhavncnova+2] i\server_proxyclient_address = 10.0.0.11" /etc/nova/nova.conf
+#sudo sed -i "$[linhavncnova+3] i\enabled = true" /etc/nova/nova.conf
 
 linhaglancenova=`sudo awk '{if ($0 == "[glance]") {print NR;}}' /etc/nova/nova.conf`
 sudo sed -i "$[linhaglancenova+1] i\api_servers = http://controller:9292" /etc/nova/nova.conf
@@ -65,7 +65,7 @@ sudo sed -i 's/^log_dir = \/var\/log\/nova/#log_dir = \/var\/log\/nova/' /etc/no
 sudo sed -i 's/^os_region_name = openstack/#os_region_name = openstack/' /etc/nova/nova.conf
 
 linhaplacementnova=`sudo awk '{if ($0 == "[placement]") {print NR;}}' /etc/nova/nova.conf`
-sudo sed -i "$[linhaplacementnova+1] i\os_region_name = RegionOne" /etc/nova/nova.conf
+sudo sed -i "$[linhaplacementnova+1] i\region_name = RegionOne" /etc/nova/nova.conf
 sudo sed -i "$[linhaplacementnova+2] i\project_domain_name = Default" /etc/nova/nova.conf
 sudo sed -i "$[linhaplacementnova+3] i\project_name = service" /etc/nova/nova.conf
 sudo sed -i "$[linhaplacementnova+4] i\auth_type = password" /etc/nova/nova.conf
