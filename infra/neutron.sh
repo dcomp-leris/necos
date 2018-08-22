@@ -78,3 +78,35 @@ linhadefaultdhcpneutron=`sudo awk '{if ($0 == "[DEFAULT]") {print NR;}}' /etc/ne
 sudo sed -i "$[linhadefaultdhcpneutron+1] i\interface_driver = linuxbridge" /etc/neutron/dhcp_agent.ini
 sudo sed -i "$[linhadefaultdhcpneutron+2] i\dhcp_driver = neutron.agent.linux.dhcp.Dnsmasq" /etc/neutron/dhcp_agent.ini
 sudo sed -i "$[linhadefaultdhcpneutron+3] i\enable_isolated_metadata = true" /etc/neutron/dhcp_agent.ini
+
+linhadefaultmetadataneutron=`sudo awk '{if ($0 == "[DEFAULT]") {print NR;}}' /etc/neutron/metadata_agent.ini`
+sudo sed -i "$[linhadefaultmetadataneutron+1] i\nova_metadata_host = controller" /etc/neutron/metadata_agent.ini
+sudo sed -i "$[linhadefaultmetadataneutron+2] i\metadata_proxy_shared_secret = secret" /etc/neutron/metadata_agent.ini
+
+linhaneutronnova=`sudo awk '{if ($0 == "[neutron]") {print NR;}}' /etc/nova/nova.conf`
+sudo sed -i "$[linhaneutronnova+1] i\url = http://controller:9696" /etc/nova/nova.conf
+sudo sed -i "$[linhaneutronnova+2] i\auth_url = http://controller:5000" /etc/nova/nova.conf
+sudo sed -i "$[linhaneutronnova+3] i\auth_type = password" /etc/nova/nova.conf
+sudo sed -i "$[linhaneutronnova+4] i\project_domain_name = default" /etc/nova/nova.conf
+sudo sed -i "$[linhaneutronnova+5] i\user_domain_name = default" /etc/nova/nova.conf
+sudo sed -i "$[linhaneutronnova+6] i\region_name = RegionOne" /etc/nova/nova.conf
+sudo sed -i "$[linhaneutronnova+7] i\project_name = service" /etc/nova/nova.conf
+sudo sed -i "$[linhaneutronnova+8] i\username = neutron" /etc/nova/nova.conf
+sudo sed -i "$[linhaneutronnova+9] i\password = secret" /etc/nova/nova.conf
+sudo sed -i "$[linhaneutronnova+10] i\service_metadata_proxy = true" /etc/nova/nova.conf
+sudo sed -i "$[linhaneutronnova+11] i\metadata_proxy_shared_secret = secret" /etc/nova/nova.conf
+
+sudo su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" neutron >> neutron-db-manage.log 2>> neutron-db-manage-error.log
+
+sudo service nova-api restart
+if [ $? -ne 0 ]; then echo "NECOS: error"; fi
+sudo service neutron-server restart
+if [ $? -ne 0 ]; then echo "NECOS: error"; fi
+sudo service neutron-linuxbridge-agent restart
+if [ $? -ne 0 ]; then echo "NECOS: error"; fi
+sudo service neutron-dhcp-agent restart
+if [ $? -ne 0 ]; then echo "NECOS: error"; fi
+sudo service neutron-metadata-agent restart
+if [ $? -ne 0 ]; then echo "NECOS: error"; fi
+sudo service neutron-l3-agent restart
+if [ $? -ne 0 ]; then echo "NECOS: error"; fi
