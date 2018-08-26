@@ -24,43 +24,43 @@ Vagrant.configure("2") do |config|
       chown -R vagrant.vagrant necos
 
       echo "NECOS: apt upgrading"
-      bash necos/infra/apt.sh
+      bash necos/vagrant/apt.sh
 
       echo "NECOS: coping /etc/hosts"
-      sudo cp necos/infra/hosts /etc/
+      sudo cp necos/vagrant/hosts /etc/
 
       echo "NECOS: installing chrony"
-      bash necos/infra/chrony.sh
+      bash necos/vagrant/chrony.sh
 
       echo "NECOS: installing mariadb"
-      bash necos/infra/mariadb.sh
+      bash necos/vagrant/mariadb.sh
 
       echo "NECOS: installing rabbitmq"
-      bash necos/infra/rabbitmq.sh
+      bash necos/vagrant/rabbitmq.sh
 
       echo "NECOS: installing memcached"
-      bash necos/infra/memcached.sh
+      bash necos/vagrant/memcached.sh
 
       echo "NECOS: installing etcd"
-      bash necos/infra/etcd.sh
+      bash necos/vagrant/etcd.sh
 
       echo "NECOS: installing keystone"
-      bash necos/infra/keystone.sh
+      bash necos/vagrant/keystone.sh
 
       echo "NECOS: installing glance"
-      bash necos/infra/glance.sh
+      bash necos/vagrant/glance.sh
 
       echo "NECOS: installing nova"
-      bash necos/infra/nova.sh
+      bash necos/vagrant/nova.sh
 
       echo "NECOS: installing neutron"
-      bash necos/infra/neutron.sh
+      bash necos/vagrant/neutron.sh
 
       echo "NECOS: installing horizon"
-      bash necos/infra/horizon.sh
+      bash necos/vagrant/horizon.sh
 
       echo "NECOS: moving log files"
-      bash necos/infra/move.sh
+      bash necos/vagrant/move.sh
     SHELL
   end
 ############### end controller block ###############
@@ -84,22 +84,22 @@ Vagrant.configure("2") do |config|
       chown -R vagrant.vagrant necos
 
       echo "NECOS: apt upgrading"
-      bash necos/infra/apt.sh
+      bash necos/vagrant/apt.sh
 
       echo "NECOS: coping /etc/hosts"
-      sudo cp necos/infra/hosts /etc/
+      sudo cp necos/vagrant/hosts /etc/
 
       echo "NECOS: installing chrony"
-      bash necos/infra/chrony-client.sh
+      bash necos/vagrant/chrony-client.sh
 
       echo "NECOS: installing nova"
-      bash necos/infra/nova-compute.sh 10.0.0.31
+      bash necos/vagrant/nova-compute.sh 10.0.0.31
 
       echo "NECOS: installing neutron"
-      bash necos/infra/neutron-compute.sh 10.0.0.31
+      bash necos/vagrant/neutron-compute.sh 10.0.0.31
 
       echo "NECOS: moving log files"
-      bash necos/infra/move.sh
+      bash necos/vagrant/move.sh
     SHELL
   end
 ############### end compute1 block ###############
@@ -123,22 +123,22 @@ Vagrant.configure("2") do |config|
       chown -R vagrant.vagrant necos
 
       echo "NECOS: apt upgrading"
-      bash necos/infra/apt.sh
+      bash necos/vagrant/apt.sh
 
       echo "NECOS: coping /etc/hosts"
-      sudo cp necos/infra/hosts /etc/
+      sudo cp necos/vagrant/hosts /etc/
 
       echo "NECOS: installing chrony"
-      bash necos/infra/chrony-client.sh
+      bash necos/vagrant/chrony-client.sh
 
       echo "NECOS: installing nova"
-      bash necos/infra/nova-compute.sh 10.0.0.32
+      bash necos/vagrant/nova-compute.sh 10.0.0.32
 
       echo "NECOS: installing neutron"
-      bash necos/infra/neutron-compute.sh 10.0.0.32
+      bash necos/vagrant/neutron-compute.sh 10.0.0.32
 
       echo "NECOS: moving log files"
-      bash necos/infra/move.sh
+      bash necos/vagrant/move.sh
     SHELL
   end
 ############### end compute2 block ###############
