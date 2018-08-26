@@ -10,7 +10,7 @@ GRANT ALL PRIVILEGES ON nova_cell0.* TO 'nova'@'localhost' IDENTIFIED BY 'secret
 GRANT ALL PRIVILEGES ON nova_cell0.* TO 'nova'@'%' IDENTIFIED BY 'secret';
 _EOF_
 
-source necos/infra/admin-openrc
+source necos/vagrant/admin-openrc
 
 openstack user create --domain default --password secret nova >> nova.log 2>> nova-error.log
 openstack role add --project service --user nova admin >> nova.log 2>> nova-error.log

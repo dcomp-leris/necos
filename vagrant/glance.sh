@@ -4,7 +4,7 @@ GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'localhost' IDENTIFIED BY 'secret';
 GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'%' IDENTIFIED BY 'secret';
 _EOF_
 
-source necos/infra/admin-openrc
+source necos/vagrant/admin-openrc
 
 openstack user create --domain default --password secret glance >> glance.log 2>> glance-error.log
 openstack role add --project service --user glance admin >> glance.log 2>> glance-error.log
