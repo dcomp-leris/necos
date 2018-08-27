@@ -4,7 +4,7 @@ GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'localhost' IDENTIFIED BY 'secret
 GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'%' IDENTIFIED BY 'secret';
 _EOF_
 
-source necos/infra/admin-openrc
+source necos/vagrant/admin-openrc
 
 openstack user create --domain default --password secret neutron >> neutron.log 2>> neutron-error.log
 openstack role add --project service --user neutron admin >> neutron.log 2>> neutron-error.log
