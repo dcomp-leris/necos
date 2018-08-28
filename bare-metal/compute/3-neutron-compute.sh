@@ -3,7 +3,7 @@ sudo apt -qy install neutron-linuxbridge-agent >> apt-neutron-compute.log 2>> ap
 sudo sed -i 's/^connection = sqlite:\/\/\/\/var\/lib\/neutron\/neutron.sqlite/#connection = sqlite:\/\/\/\/var\/lib\/neutron\/neutron.sqlite/' /etc/neutron/neutron.conf
 
 linhadefaultneutron=`sudo awk '{if ($0 == "[DEFAULT]") {print NR;}}' /etc/neutron/neutron.conf`
-sudo sed -i "$[linhadefaultneutron+2] i\transport_url = rabbit://openstack:secret@controller" /etc/neutron/neutron.conf
+sudo sed -i "$[linhadefaultneutron+2] i\transport_url = rabbit://openstack:devstack@controller" /etc/neutron/neutron.conf
 sudo sed -i "$[linhadefaultneutron+3] i\auth_strategy = keystone" /etc/neutron/neutron.conf
 
 linhaauthtokenneutron=`sudo awk '{if ($0 == "[keystone_authtoken]") {print NR;}}' /etc/neutron/neutron.conf`
@@ -15,10 +15,10 @@ sudo sed -i "$[linhaauthtokenneutron+5] i\project_domain_name = default" /etc/ne
 sudo sed -i "$[linhaauthtokenneutron+6] i\user_domain_name = default" /etc/neutron/neutron.conf
 sudo sed -i "$[linhaauthtokenneutron+7] i\project_name = service" /etc/neutron/neutron.conf
 sudo sed -i "$[linhaauthtokenneutron+8] i\username = neutron" /etc/neutron/neutron.conf
-sudo sed -i "$[linhaauthtokenneutron+9] i\password = secret" /etc/neutron/neutron.conf
+sudo sed -i "$[linhaauthtokenneutron+9] i\password = devstack" /etc/neutron/neutron.conf
 
 linhalinuxbridgeneutron=`sudo awk '{if ($0 == "[linux_bridge]") {print NR;}}' /etc/neutron/plugins/ml2/linuxbridge_agent.ini`
-sudo sed -i "$[linhalinuxbridgeneutron+1] i\physical_interface_mappings = provider:enp0s9" /etc/neutron/plugins/ml2/linuxbridge_agent.ini
+sudo sed -i "$[linhalinuxbridgeneutron+1] i\physical_interface_mappings = provider:eno1" /etc/neutron/plugins/ml2/linuxbridge_agent.ini
 
 HOST_IP=$1
 linhavxlanneutron=`sudo awk '{if ($0 == "[vxlan]") {print NR;}}' /etc/neutron/plugins/ml2/linuxbridge_agent.ini`
@@ -39,7 +39,7 @@ sudo sed -i "$[linhaneutronnova+5] i\user_domain_name = default" /etc/nova/nova.
 sudo sed -i "$[linhaneutronnova+6] i\region_name = RegionOne" /etc/nova/nova.conf
 sudo sed -i "$[linhaneutronnova+7] i\project_name = service" /etc/nova/nova.conf
 sudo sed -i "$[linhaneutronnova+8] i\username = neutron" /etc/nova/nova.conf
-sudo sed -i "$[linhaneutronnova+9] i\password = secret" /etc/nova/nova.conf
+sudo sed -i "$[linhaneutronnova+9] i\password = devstack" /etc/nova/nova.conf
 
 sudo service nova-compute restart
 if [ $? -ne 0 ]; then echo "NECOS: error"; fi
