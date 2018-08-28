@@ -53,10 +53,10 @@ sudo sed -i "$[linhaml2neutron+3] i\mechanism_drivers = linuxbridge,l2population
 sudo sed -i "$[linhaml2neutron+4] i\extension_drivers = port_security" /etc/neutron/plugins/ml2/ml2_conf.ini
 
 linhaml2flatneutron=`sudo awk '{if ($0 == "[ml2_type_flat]") {print NR;}}' /etc/neutron/plugins/ml2/ml2_conf.ini`
-sudo sed -i "$[linhaml2vxlanneutron+1] i\flat_networks = provider" /etc/neutron/plugins/ml2/ml2_conf.ini
+sudo sed -i "$[linhaml2flatneutron+1] i\flat_networks = provider" /etc/neutron/plugins/ml2/ml2_conf.ini
 
 linhaml2vxlanneutron=`sudo awk '{if ($0 == "[ml2_type_vxlan]") {print NR;}}' /etc/neutron/plugins/ml2/ml2_conf.ini`
-sudo sed -i "$[linhaml2vxlanneutron+2] i\vni_ranges = 1:1000" /etc/neutron/plugins/ml2/ml2_conf.ini
+sudo sed -i "$[linhaml2vxlanneutron+1] i\vni_ranges = 1:1000" /etc/neutron/plugins/ml2/ml2_conf.ini
 
 linhasecuritygroupneutron=`sudo awk '{if ($0 == "[securitygroup]") {print NR;}}' /etc/neutron/plugins/ml2/ml2_conf.ini`
 sudo sed -i "$[linhasecuritygroupneutron+1] i\enable_ipset = true" /etc/neutron/plugins/ml2/ml2_conf.ini
