@@ -1,14 +1,17 @@
 
-sudo chmod 777 ceilometer.log 
-sudo chmod 777 ceillometer-error.log 
-openstack user create --domain default --password secret ceilometer >> ceilometer.log 2>> ceilometer-error.log
-openstack role add --project service --user ceilometer admin >> ceilometer.log 2>> ceilometer-error.log
-openstack user create --domain default --password secret gnocchi >> ceilometer.log 2>> ceilometer-error.log
-openstack service create --name gnocchi --description "Metric Service" metric >> ceilometer.log 2>> ceilometer-error.log
-openstack role add --project service --user gnocchi admin >> ceilometer.log 2>> ceilometer-error.log
-openstack endpoint create --region RegionOne metric public http://controller:8041 >> ceilometer.log 2>> ceilometer-error.log
-openstack endpoint create --region RegionOne metric internal http://controller:8041 >> ceilometer.log 2>> ceilometer-error.log
-openstack endpoint create --region RegionOne metric admin http://controller:8041 >> ceilometer.log 2>> ceilometer-error.log
+
+sudo touch /cd/home/vagrant/logs/ceilometer.log
+sudo touch /cd/home/vagrant/logs/ceilometer-error.log
+sudo chmod 755 /cd/home/vagrant/logs/ceilometer.log 
+sudo chmod 755 /cd/home/vagrant/logs/ceillometer-error.log 
+openstack user create --domain default --password secret ceilometer >> /cd/home/vagrant/logs/ceilometer.log 2>> /cd/home/vagrant/logs/ceilometer-error.log
+openstack role add --project service --user ceilometer admin >> /cd/home/vagrant/logs/ceilometer.log 2>> /cd/home/vagrant/logs/ceilometer-error.log
+openstack user create --domain default --password secret gnocchi >> /cd/home/vagrant/logs/ceilometer.log 2>> /cd/home/vagrant/logs/ceilometer-error.log
+openstack service create --name gnocchi --description "Metric Service" metric >> /cd/home/vagrant/logs/ceilometer.log 2>> /cd/home/vagrant/logs/ceilometer-error.log
+openstack role add --project service --user gnocchi admin >> /cd/home/vagrant/logs/ceilometer.log 2>> /cd/home/vagrant/logs/ceilometer-error.log
+openstack endpoint create --region RegionOne metric public http://controller:8041 >> /cd/home/vagrant/logs/ceilometer.log 2>> /cd/home/vagrant/logs/ceilometer-error.log
+openstack endpoint create --region RegionOne metric internal http://controller:8041 >> /cd/home/vagrant/logs/ceilometer.log 2>> /cd/home/vagrant/logs/ceilometer-error.log
+openstack endpoint create --region RegionOne metric admin http://controller:8041 >> /cd/home/vagrant/logs/ceilometer.log 2>> /cd/home/vagrant/logs/ceilometer-error.log
 
 sudo apt -qy install redis
 
