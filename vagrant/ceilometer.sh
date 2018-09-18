@@ -1,45 +1,27 @@
 #source necos/vagrant/admin-openrc
 
-openstack user create --domain default --password secret ceilometer >> ceilometer.log 2>> ceilometer-error.log
-openstack role add --project service --user ceilometer admin >> ceilometer.log 2>> ceilometer-error.log
-openstack user create --domain default --password secret gnocchi >> ceilometer.log 2>> ceilometer-error.log
-openstack service create --name gnocchi --description "Metric Service" metric >> ceilometer.log 2>> ceilometer-error.log
-openstack role add --project service --user gnocchi admin >> ceilometer.log 2>> ceilometer-error.log
-openstack endpoint create --region RegionOne metric public http://controller:8041 >> ceilometer.log 2>> ceilometer-error.log
-openstack endpoint create --region RegionOne metric internal http://controller:8041 >> ceilometer.log 2>> ceilometer-error.log
-openstack endpoint create --region RegionOne metric admin http://controller:8041 >> ceilometer.log 2>> ceilometer-error.log
+sudo apt install ceilometer-agent-notification ceilometer-agent-central
 
-sudo apt -qy install gnocchi-api gnocchi-metricd python-gnocchiclient
+linhaDefault=`sudo awk '{if ($0 == "[DEFAULT]") {print NR;}}' /etc/ceilometer/ceilometer.conf`
+sudo sed -i "$[linhaDefault+2] i\transport_url = rabbit://openstack:secret@controller" /etc/ceilometer/ceilometer.conf
 
-sudo mysql -uroot -psecret <<_EOF_
-CREATE DATABASE gnocchi;
-GRANT ALL PRIVILEGES ON gnocchi.* TO 'gnocchi'@'localhost' IDENTIFIED BY 'secret';
-GRANT ALL PRIVILEGES ON gnocchi.* TO 'gnocchi'@'%' IDENTIFIED BY 'secret';
-_EOF_
+linhaCredentials=`sudo awk '{if ($0 == "[service_credentials]") {print NR;}}' /etc/ceilometer/ceilometer.conf`
+sudo sed -i "$[linhaCredentials+1] i\auth_type = password" /etc/ceilometer/ceilometer.conf
+sudo sed -i "$[linhaCredentials+2] i\auth_url = http://controller:5000/v3" /etc/ceilometer/ceilometer.conf
+sudo sed -i "$[linhaCredentials+3] i\project_domain_id = default" /etc/ceilometer/ceilometer.conf
+sudo sed -i "$[linhaCredentials+4] i\user_domain_id = default" /etc/ceilometer/ceilometer.conf
+sudo sed -i "$[linhaCredentials+5] i\project_name = service" /etc/ceilometer/ceilometer.conf
+sudo sed -i "$[linhaCredentials+6] i\username = ceilometer" /etc/ceilometer/ceilometer.conf
+sudo sed -i "$[linhaCredentials+7] i\password = secret" /etc/ceilometer/ceilometer.conf
+sudo sed -i "$[linhaCredentials+8] i\interface = internalURL" /etc/ceilometer/ceilometer.conf
+sudo sed -i "$[linhaCredentials+9] i\region_name = RegionOne" /etc/ceilometer/ceilometer.conf
 
-linhaapignocchi=`sudo awk '{if ($0 == "[api]") {print NR;}}' /etc/gnocchi/gnocchi.conf`
-sudo sed -i "$[linhaapignocchi+1] i\auth_mode = keystone" /etc/gnocchi/gnocchi.conf
+sudo sed -i "s*#pipeline_cfg_file = pipeline.yaml*pipeline_cfg_file = pipeline.yaml*" /etc/ceilometer/ceilometer.conf
 
-linhaauthtokengnocchi=`sudo awk '{if ($0 == "[keystone_authtoken]") {print NR;}}' /etc/gnocchi/gnocchi.conf`
-sudo sed -i "$[linhaauthtokengnocchi+2] i\auth_type = password" /etc/gnocchi/gnocchi.conf
-sudo sed -i "$[linhaauthtokengnocchi+3] i\auth_url = http://controller:5000/v3" /etc/gnocchi/gnocchi.conf
-sudo sed -i "$[linhaauthtokengnocchi+4] i\project_domain_name = Default" /etc/gnocchi/gnocchi.conf
-sudo sed -i "$[linhaauthtokengnocchi+5] i\user_domain_name = Default" /etc/gnocchi/gnocchi.conf
-sudo sed -i "$[linhaauthtokengnocchi+6] i\project_name = service" /etc/gnocchi/gnocchi.conf
-sudo sed -i "$[linhaauthtokengnocchi+7] i\username = gnocchi" /etc/gnocchi/gnocchi.conf
-sudo sed -i "$[linhaauthtokengnocchi+8] i\password = secret" /etc/gnocchi/gnocchi.conf
-sudo sed -i "$[linhaauthtokengnocchi+9] i\interface = internalURL" /etc/gnocchi/gnocchi.conf
-sudo sed -i "$[linhaauthtokengnocchi+10] i\region_name = RegionOne" /etc/gnocchi/gnocchi.conf
+sudo touch /etc/ceilometer/pipeline.yaml
+sudo chmod 755 /etc/ceilometer/pipeline.yaml
 
-sudo sed -i 's/sqlite:\/\/\/\/var\/lib\/gnocchi\/gnocchidb/mysql+pymysql:\/\/gnocchi:secret@controller\/gnocchi/' /etc/gnocchi/gnocchi.conf
+sudo echo -ne "publishers:\n\t- gnocchi://?filter_project=service&archive_policy=low\n" >> /etc/ceilometer/pipeline.yaml
 
-linhastoragegnocchi=`sudo awk '{if ($0 == "[storage]") {print NR;}}' /etc/gnocchi/gnocchi.conf`
-sudo sed -i "$[linhastoragegnocchi+1] i\coordination_url = redis://controller:6379" /etc/gnocchi/gnocchi.conf
-sudo sed -i "$[linhastoragegnocchi+2] i\file_basepath = /var/lib/gnocchi" /etc/gnocchi/gnocchi.conf
-sudo sed -i "$[linhastoragegnocchi+3] i\driver = file" /etc/gnocchi/gnocchi.conf
-
-sudo gnocchi-upgrade >> gnocchi.log 2>> gnocchi-error.log
-sudo service gnocchi-api restart
-if [ $? -ne 0 ]; then echo "NECOS: error"; fi
-sudo service gnocchi-metricd restart
-if [ $? -ne 0 ]; then echo "NECOS: error"; fi
+#Não foi possível realizar o ceilometer-upgrade
+sudo ceilometer-upgrade

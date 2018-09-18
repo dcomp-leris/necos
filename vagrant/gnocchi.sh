@@ -1,5 +1,4 @@
-
-
+#source necos/vagrant/admin-openrc
 openstack user create --domain default --password secret ceilometer >> ceilometer.log 2>> ceilometer-error.log
 openstack role add --project service --user ceilometer admin >> ceilometer.log 2>> ceilometer-error.log
 openstack user create --domain default --password secret gnocchi >> ceilometer.log 2>> ceilometer-error.log
@@ -49,7 +48,6 @@ sudo sed -i "$[linhaauthtokengnocchi+8] i\password = secret" /etc/gnocchi/gnocch
 sudo sed -i "$[linhaauthtokengnocchi+9] i\interface = internalURL" /etc/gnocchi/gnocchi.conf
 sudo sed -i "$[linhaauthtokengnocchi+10] i\region_name = RegionOne" /etc/gnocchi/gnocchi.conf
 
-#A linha abaixo ainda não está funcionando arrumar!
 sudo sed -i 's*#url = <None>*url = mysql+pymysql://gnocchi:secret@controller/gnocchi*' /etc/gnocchi/gnocchi.conf
 
 linhastoragegnocchi=`sudo awk '{if/ ($0 == "[storage]") {print NR;}}' /etc/gnocchi/gnocchi.conf`
@@ -60,7 +58,7 @@ sudo sed -i "$[linhastoragegnocchi+3] i\driver = file" /etc/gnocchi/gnocchi.conf
 linhadefault=`sudo awk '{if ($0 == "[DEFAULT]") {print NR;}}' /etc/gnocchi/gnocchi.conf`
 sudo sed -i "$[linhadefault+1] i\coordination_url = redis://controller:6379" /etc/gnocchi/gnocchi.conf
 
-
+sudo pip install gnocchiclient
 
 sudo gnocchi-upgrade --config-file /etc/gnocchi/gnocchi.conf >> gnocchiUpgrade.log 2>> gnocchiUpgrade-error.log
 
