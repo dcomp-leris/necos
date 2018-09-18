@@ -2,6 +2,8 @@
 
 sudo apt install -qy ceilometer-agent-notification ceilometer-agent-central
 
+sudo chmod 777 /etc/ceilometer/ceilometer.conf
+
 linhaDefault=`sudo awk '{if ($0 == "[DEFAULT]") {print NR;}}' /etc/ceilometer/ceilometer.conf`
 sudo sed -i "$[linhaDefault+2] i\transport_url = rabbit://openstack:secret@controller" /etc/ceilometer/ceilometer.conf
 

@@ -1,5 +1,6 @@
-source necos/vagrant/admin-openrc
-export OS_AUTH_TYPE=password 
+
+sudo chmod 777 ceilometer.log 
+sudo chmod 777 ceillometer-error.log 
 openstack user create --domain default --password secret ceilometer >> ceilometer.log 2>> ceilometer-error.log
 openstack role add --project service --user ceilometer admin >> ceilometer.log 2>> ceilometer-error.log
 openstack user create --domain default --password secret gnocchi >> ceilometer.log 2>> ceilometer-error.log
