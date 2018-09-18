@@ -48,10 +48,9 @@ sudo sed -i "$[linhaauthtokengnocchi+10] i\region_name = RegionOne" /etc/gnocchi
 
 sudo sed -i 's*#url = <None>*url = mysql+pymysql://gnocchi:secret@controller/gnocchi*' /etc/gnocchi/gnocchi.conf
 
-linhastoragegnocchi=`sudo awk '{if/ ($0 == "[storage]") {print NR;}}' /etc/gnocchi/gnocchi.conf`
-sudo sed -i "$[linhastoragegnocchi+1] d\coordination_url = redis://controller:6379" /etc/gnocchi/gnocchi.conf
-sudo sed -i "$[linhastoragegnocchi+2] i\file_basepath = /var/lib/gnocchi" /etc/gnocchi/gnocchi.conf
-sudo sed -i "$[linhastoragegnocchi+3] i\driver = file" /etc/gnocchi/gnocchi.conf
+linhastoragegnocchi=`sudo awk '{if ($0 == "[storage]") {print NR;}}' /etc/gnocchi/gnocchi.conf`
+sudo sed -i "$[linhastoragegnocchi+1] i\file_basepath = /var/lib/gnocchi" /etc/gnocchi/gnocchi.conf
+sudo sed -i "$[linhastoragegnocchi+2] i\driver = file" /etc/gnocchi/gnocchi.conf
 
 linhadefault=`sudo awk '{if ($0 == "[DEFAULT]") {print NR;}}' /etc/gnocchi/gnocchi.conf`
 sudo sed -i "$[linhadefault+1] i\coordination_url = redis://controller:6379" /etc/gnocchi/gnocchi.conf
@@ -61,7 +60,7 @@ sudo pip install gnocchiclient
 sudo gnocchi-upgrade --config-file /etc/gnocchi/gnocchi.conf >> gnocchiUpgrade.log 2>> gnocchiUpgrade-error.log
 
 sudo touch /etc/init.d/gnocchi-api
-sudo chmod 755 /etc/init.d/gnocchi-api
+sudo chmod 777 /etc/init.d/gnocchi-api
 
 sudo tee -a /etc/init.d/gnocchi-api 1>/dev/null <<_EOF_   
 #!/bin/bash
@@ -76,7 +75,7 @@ sudo ln -s /etc/init.d/gnocchi-api /etc/rc3.d/S99gnocchi-api
 
 #O metricd ainda não está funcionando
 sudo touch /etc/init.d/gnocchi-metricd
-sudo chmod 755 /etc/init.d/gnocchi-metricd
+sudo chmod 777 /etc/init.d/gnocchi-metricd
 
 sudo tee -a /etc/init.d/gnocchi-metricd 1>/dev/null <<_EOF_   
 #!/bin/bash

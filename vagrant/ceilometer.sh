@@ -1,6 +1,6 @@
 #source necos/vagrant/admin-openrc
 
-sudo apt install ceilometer-agent-notification ceilometer-agent-central
+sudo apt install -qy ceilometer-agent-notification ceilometer-agent-central
 
 linhaDefault=`sudo awk '{if ($0 == "[DEFAULT]") {print NR;}}' /etc/ceilometer/ceilometer.conf`
 sudo sed -i "$[linhaDefault+2] i\transport_url = rabbit://openstack:secret@controller" /etc/ceilometer/ceilometer.conf
@@ -19,9 +19,12 @@ sudo sed -i "$[linhaCredentials+9] i\region_name = RegionOne" /etc/ceilometer/ce
 sudo sed -i "s*#pipeline_cfg_file = pipeline.yaml*pipeline_cfg_file = pipeline.yaml*" /etc/ceilometer/ceilometer.conf
 
 sudo touch /etc/ceilometer/pipeline.yaml
-sudo chmod 755 /etc/ceilometer/pipeline.yaml
+sudo chmod 777 /etc/ceilometer/pipeline.yaml
 
 sudo echo -ne "publishers:\n\t- gnocchi://?filter_project=service&archive_policy=low\n" >> /etc/ceilometer/pipeline.yaml
 
 #Não foi possível realizar o ceilometer-upgrade
 sudo ceilometer-upgrade
+
+sudo service ceilometer-agent-central restart
+sudo service ceilometer-agent-notification restart
