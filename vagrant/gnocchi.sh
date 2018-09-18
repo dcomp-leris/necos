@@ -1,4 +1,5 @@
-#source necos/vagrant/admin-openrc
+source necos/vagrant/admin-openrc
+export OS_AUTH_TYPE=password 
 openstack user create --domain default --password secret ceilometer >> ceilometer.log 2>> ceilometer-error.log
 openstack role add --project service --user ceilometer admin >> ceilometer.log 2>> ceilometer-error.log
 openstack user create --domain default --password secret gnocchi >> ceilometer.log 2>> ceilometer-error.log
@@ -11,7 +12,7 @@ openstack endpoint create --region RegionOne metric admin http://controller:8041
 sudo apt -qy install redis
 
 sudo chmod 755 /etc/redis/redis.conf
-sudo sed -i 's/bind 127.0.0.1 ::1/bind 10.0.0.11/' /etc/redis/redis.conf
+sudo sed -i 's/bind 127.0.0.1 ::1/bind 10.0.0.11 ::1/' /etc/redis/redis.conf
 sudo service redis restart
 
 
