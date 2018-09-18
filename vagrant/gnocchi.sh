@@ -30,7 +30,7 @@ _EOF_
 
 sudo mkdir /etc/gnocchi
 sudo touch /etc/gnocchi/gnocchi.conf
-sudo chmod 777 /etc/gnocchi/*
+sudo chmod 777 /etc/gnocchi/gnocchi.conf
 sudo gnocchi-config-generator > /etc/gnocchi/gnocchi.conf
 
 linhaapignocchi=`sudo awk '{if ($0 == "[api]") {print NR;}}' /etc/gnocchi/gnocchi.conf`
