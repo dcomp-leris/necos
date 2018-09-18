@@ -10,6 +10,7 @@ openstack endpoint create --region RegionOne metric admin http://controller:8041
 
 sudo apt -qy install redis
 
+sudo chmod 755 /etc/redis/redis.conf
 sudo sed -i 's/bind 127.0.0.1 ::1/bind 10.0.0.11/' /etc/redis/redis.conf
 sudo service redis restart
 
@@ -18,6 +19,7 @@ sudo apt -qy install python-pip
 sudo pip install uwsgi
 sudo apt -qy install libsnappy-dev
 sudo pip install gnocchi[mysql,redis,keystone,prometheus]
+sudo pip install gnocchiclient
 
 
 sudo mysql -uroot -psecret <<_EOF_
@@ -25,7 +27,6 @@ CREATE DATABASE gnocchi;
 GRANT ALL PRIVILEGES ON gnocchi.* TO 'gnocchi'@'localhost' IDENTIFIED BY 'secret';
 GRANT ALL PRIVILEGES ON gnocchi.* TO 'gnocchi'@'%' IDENTIFIED BY 'secret';
 _EOF_
-
 
 sudo mkdir /etc/gnocchi
 sudo touch /etc/gnocchi/gnocchi.conf
@@ -55,12 +56,11 @@ sudo sed -i "$[linhastoragegnocchi+2] i\driver = file" /etc/gnocchi/gnocchi.conf
 linhadefault=`sudo awk '{if ($0 == "[DEFAULT]") {print NR;}}' /etc/gnocchi/gnocchi.conf`
 sudo sed -i "$[linhadefault+1] i\coordination_url = redis://controller:6379" /etc/gnocchi/gnocchi.conf
 
-sudo pip install gnocchiclient
 
 sudo gnocchi-upgrade --config-file /etc/gnocchi/gnocchi.conf >> gnocchiUpgrade.log 2>> gnocchiUpgrade-error.log
 
 sudo touch /etc/init.d/gnocchi-api
-sudo chmod 777 /etc/init.d/gnocchi-api
+sudo chmod 755 /etc/init.d/gnocchi-api
 
 sudo tee -a /etc/init.d/gnocchi-api 1>/dev/null <<_EOF_   
 #!/bin/bash
@@ -75,7 +75,7 @@ sudo ln -s /etc/init.d/gnocchi-api /etc/rc3.d/S99gnocchi-api
 
 #O metricd ainda não está funcionando
 sudo touch /etc/init.d/gnocchi-metricd
-sudo chmod 777 /etc/init.d/gnocchi-metricd
+sudo chmod 755 /etc/init.d/gnocchi-metricd
 
 sudo tee -a /etc/init.d/gnocchi-metricd 1>/dev/null <<_EOF_   
 #!/bin/bash
