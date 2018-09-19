@@ -1,9 +1,7 @@
 
 
-sudo touch /home/vagrant/logs/ceilometer.log
-sudo touch /home/vagrant/logs/ceilometer-error.log
-sudo chmod 755 /home/vagrant/logs/ceilometer.log 
-sudo chmod 755 /home/vagrant/logs/ceillometer-error.log 
+touch /home/vagrant/logs/ceilometer.log
+touch /home/vagrant/logs/ceilometer-error.log
 openstack user create --domain default --password secret ceilometer >> /home/vagrant/logs/ceilometer.log 2>> /home/vagrant/logs/ceilometer-error.log
 openstack role add --project service --user ceilometer admin >> /home/vagrant/logs/ceilometer.log 2>> /home/vagrant/logs/ceilometer-error.log
 openstack user create --domain default --password secret gnocchi >> /home/vagrant/logs/ceilometer.log 2>> /home/vagrant/logs/ceilometer-error.log
