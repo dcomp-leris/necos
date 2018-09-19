@@ -20,13 +20,17 @@ sudo sed -i "$[linhaCredentials+9] i\region_name = RegionOne" /etc/ceilometer/ce
 
 sudo sed -i "s*#pipeline_cfg_file = pipeline.yaml*pipeline_cfg_file = pipeline.yaml*" /etc/ceilometer/ceilometer.conf
 
-sudo touch /etc/ceilometer/pipeline.yaml
-sudo chmod 777 /etc/ceilometer/pipeline.yaml
+linhaDispatcherGnocchi=`sudo awk '{if ($0 == "[dispatcher_gnocchi]") {print NR;}}' /etc/ceilometer/ceilometer.conf`
+sudo sed -i "$[linhaDispatcherGnocchi+1] i\filter_service_activity = False" /etc/ceilometer/ceilometer.conf
+sudo sed -i "$[linhaDispatcherGnocchi+2] i\archive_policy = high" /etc/ceilometer/ceilometer.conf
 
-sudo echo -ne "publishers:\n\t- gnocchi://?filter_project=service&archive_policy=low\n" >> /etc/ceilometer/pipeline.yaml
+
+sudo cp /usr/lib/python2.7/dist-packages/ceilometer/pipeline/data/*.yaml /etc/ceilometer/
+
 
 #Não foi possível realizar o ceilometer-upgrade
-sudo ceilometer-upgrade
+sudo ceilometer-upgrade --config-file /etc/ceilometer/ceilometer.conf >> ceilometerUpgrade.log 2>> ceilometerUpgrade-error.log
+sudo gnocchi-upgrade --config-file /etc/gnocchi/gnocchi.conf >> gnocchiUpgrade.log 2>> gnocchiUpgrade-error.log
 
 sudo service ceilometer-agent-central restart
 sudo service ceilometer-agent-notification restart

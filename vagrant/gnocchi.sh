@@ -57,7 +57,6 @@ sudo sed -i "$[linhastoragegnocchi+2] i\driver = file" /etc/gnocchi/gnocchi.conf
 linhadefault=`sudo awk '{if ($0 == "[DEFAULT]") {print NR;}}' /etc/gnocchi/gnocchi.conf`
 sudo sed -i "$[linhadefault+1] i\coordination_url = redis://controller:6379" /etc/gnocchi/gnocchi.conf
 
-
 sudo gnocchi-upgrade --config-file /etc/gnocchi/gnocchi.conf >> gnocchiUpgrade.log 2>> gnocchiUpgrade-error.log
 
 sudo touch /etc/init.d/gnocchi-api
