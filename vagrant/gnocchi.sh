@@ -63,7 +63,7 @@ sudo gnocchi-upgrade --config-file /etc/gnocchi/gnocchi.conf >> gnocchiUpgrade.l
 sudo touch /etc/init.d/gnocchi-api
 sudo chmod 755 /etc/init.d/gnocchi-api
 
-sudo tee -a /etc/init.d/gnocchi-api 1>/dev/null <<_EOF_   
+sudo tee -a /etc/init.d/gnocchi-api 1>/dev/null <<_EOF_
 #!/bin/bash
 #
 # /etc/init.d/gnocchi-api
@@ -78,7 +78,7 @@ sudo ln -s /etc/init.d/gnocchi-api /etc/rc3.d/S99gnocchi-api
 sudo touch /etc/init.d/gnocchi-metricd
 sudo chmod 755 /etc/init.d/gnocchi-metricd
 
-sudo tee -a /etc/init.d/gnocchi-metricd 1>/dev/null <<_EOF_   
+sudo tee -a /etc/init.d/gnocchi-metricd 1>/dev/null <<_EOF_
 #!/bin/bash
 #
 # /etc/init.d/gnocchi-metricd
