@@ -1,4 +1,4 @@
-
+source necos/vagrant/admin-openrc
 
 openstack user create --domain default --password secret ceilometer >> ceilometer.log 2>> ceilometer-error.log
 openstack role add --project service --user ceilometer admin >> ceilometer.log 2>> ceilometer-error.log
