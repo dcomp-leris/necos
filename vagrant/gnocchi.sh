@@ -1,7 +1,5 @@
 
 
-touch /home/vagrant/logs/ceilometer.log
-touch /home/vagrant/logs/ceilometer-error.log
 openstack user create --domain default --password secret ceilometer >> /home/vagrant/logs/ceilometer.log 2>> /home/vagrant/logs/ceilometer-error.log
 openstack role add --project service --user ceilometer admin >> /home/vagrant/logs/ceilometer.log 2>> /home/vagrant/logs/ceilometer-error.log
 openstack user create --domain default --password secret gnocchi >> /home/vagrant/logs/ceilometer.log 2>> /home/vagrant/logs/ceilometer-error.log
