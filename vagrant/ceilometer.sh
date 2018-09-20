@@ -1,4 +1,4 @@
-#source necos/vagrant/admin-openrc
+source necos/vagrant/admin-openrc
 
 echo "Installing Ceilometer agents"
 sudo apt install -qy ceilometer-agent-notification ceilometer-agent-central
@@ -27,10 +27,7 @@ sudo sed -i "$[linhaDispatcherGnocchi+2] i\archive_policy = high" /etc/ceilomete
 
 sudo cp /usr/lib/python2.7/dist-packages/ceilometer/pipeline/data/*.yaml /etc/ceilometer/
 
-#Não foi possível realizar o ceilometer-upgrade
-echo "Upgrading gnocchi"
 sudo gnocchi-upgrade --config-file /etc/gnocchi/gnocchi.conf >> gnocchiUpgrade.log 2>> gnocchiUpgrade-error.log
-echo "Upgrading ceilometer"
 sudo ceilometer-upgrade --config-file /etc/ceilometer/ceilometer.conf >> ceilometerUpgrade.log 2>> ceilometerUpgrade-error.log
 
 sudo service ceilometer-agent-central restart
