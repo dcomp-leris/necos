@@ -29,6 +29,7 @@ sudo cp /usr/lib/python2.7/dist-packages/ceilometer/pipeline/data/*.yaml /etc/ce
 
 echo "gnocchi update"
 sudo gnocchi-upgrade --config-file /etc/gnocchi/gnocchi.conf >> gnocchiUpgrade.log 2>> gnocchiUpgrade-error.log
+sudo ln -s /etc/init.d/gnocchi-api /etc/rc3.d/S99gnocchi-metricd
 echo "ceilometer update"
 sudo ceilometer-upgrade --config-file /etc/ceilometer/ceilometer.conf >> ceilometerUpgrade.log 2>> ceilometerUpgrade-error.log
 echo "restart 1"
