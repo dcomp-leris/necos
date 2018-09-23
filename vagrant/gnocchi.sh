@@ -87,3 +87,6 @@ gnocchi-metricd --config-file /etc/gnocchi/gnocchi.conf >> gnocchiMetricd.log 2>
 _EOF_
 
 sudo ln -s /etc/init.d/gnocchi-api /etc/rc3.d/S99gnocchi-metricd
+
+gnocchi-api & >> gnocchi-api.log 2>>gnocchi-api-error.log
+gnocchi-metricd & >> gnocchi-metricd.log 2>>gnocchi-metricd-error.log
