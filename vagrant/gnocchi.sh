@@ -9,18 +9,18 @@ openstack endpoint create --region RegionOne metric public http://controller:804
 openstack endpoint create --region RegionOne metric internal http://controller:8041 >> ceilometer.log 2>> ceilometer-error.log
 openstack endpoint create --region RegionOne metric admin http://controller:8041 >> ceilometer.log 2>> ceilometer-error.log
 
-sudo apt -qy install redis
+sudo apt -qy install redis >> apt-redis.log 2>> apt-redis-error.log
 
 sudo chmod 755 /etc/redis/redis.conf
 sudo sed -i 's/bind 127.0.0.1 ::1/bind 10.0.0.11 ::1/' /etc/redis/redis.conf
 sudo service redis restart
 
 
-sudo apt -qy install python-pip
-sudo pip install uwsgi
-sudo apt -qy install libsnappy-dev
-sudo pip install gnocchi[mysql,redis,keystone,prometheus]
-sudo pip install gnocchiclient
+sudo apt -qy install python-pip >> apt-pip.log 2>> apt-pip-error.log
+sudo pip install uwsgi >> apt-uwsgi.log 2>> apt-uwsgi-error.log
+sudo apt -qy install libsnappy-dev >> apt-libsnappy.log 2>> apt-libsnappy-error.log
+sudo pip install gnocchi[mysql,redis,keystone,prometheus] >> apt-gnocchi.log 2>> apt-gnocchi-error.log
+sudo pip install gnocchiclient >> apt-gnocchi.log 2>> apt-gnocchi-error.log
 
 
 sudo mysql -uroot -psecret <<_EOF_
