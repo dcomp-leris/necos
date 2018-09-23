@@ -31,3 +31,6 @@ sudo gnocchi-upgrade --config-file /etc/gnocchi/gnocchi.conf >> gnocchiUpgrade.l
 sudo ceilometer-upgrade --config-file /etc/ceilometer/ceilometer.conf >> ceilometerUpgrade.log 2>> ceilometerUpgrade-error.log
 sudo service ceilometer-agent-central restart
 sudo service ceilometer-agent-notification restart
+
+gnocchi-api & >> gnocchi-api.log 2>>gnocchi-api-error.log
+gnocchi-metricd & >> gnocchi-metricd.log 2>>gnocchi-metricd-error.log
