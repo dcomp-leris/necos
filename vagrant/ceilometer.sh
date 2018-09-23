@@ -1,7 +1,7 @@
 source necos/vagrant/admin-openrc
 
 echo "Installing Ceilometer agents"
-sudo apt install -qy ceilometer-agent-notification ceilometer-agent-central >> ceilometer-apt.log 2>> ceilometer-apt-error.log
+sudo apt install -qy ceilometer-agent-notification ceilometer-agent-central
 
 sudo chmod 777 /etc/ceilometer/ceilometer.conf
 
