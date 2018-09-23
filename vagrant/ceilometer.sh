@@ -28,8 +28,6 @@ sudo sed -i "$[linhaDispatcherGnocchi+2] i\archive_policy = high" /etc/ceilomete
 sudo cp /usr/lib/python2.7/dist-packages/ceilometer/pipeline/data/*.yaml /etc/ceilometer/
 
 sudo gnocchi-upgrade --config-file /etc/gnocchi/gnocchi.conf >> gnocchiUpgrade.log 2>> gnocchiUpgrade-error.log
-gnocchi-api &
-gnocchi-metricd &
 sudo ceilometer-upgrade --config-file /etc/ceilometer/ceilometer.conf >> ceilometerUpgrade.log 2>> ceilometerUpgrade-error.log
 sudo service ceilometer-agent-central restart
 sudo service ceilometer-agent-notification restart
