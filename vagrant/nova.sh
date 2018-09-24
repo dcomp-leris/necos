@@ -2,12 +2,15 @@ sudo mysql -uroot -psecret <<_EOF_
 CREATE DATABASE nova_api;
 CREATE DATABASE nova;
 CREATE DATABASE nova_cell0;
+CREATE DATABASE placement;
 GRANT ALL PRIVILEGES ON nova_api.* TO 'nova'@'localhost' IDENTIFIED BY 'secret';
 GRANT ALL PRIVILEGES ON nova_api.* TO 'nova'@'%' IDENTIFIED BY 'secret';
 GRANT ALL PRIVILEGES ON nova.* TO 'nova'@'localhost' IDENTIFIED BY 'secret';
 GRANT ALL PRIVILEGES ON nova.* TO 'nova'@'%' IDENTIFIED BY 'secret';
 GRANT ALL PRIVILEGES ON nova_cell0.* TO 'nova'@'localhost' IDENTIFIED BY 'secret';
 GRANT ALL PRIVILEGES ON nova_cell0.* TO 'nova'@'%' IDENTIFIED BY 'secret';
+GRANT ALL PRIVILEGES ON placement.* TO 'placement'@'localhost' IDENTIFIED BY 'secret';
+GRANT ALL PRIVILEGES ON placement.* TO 'placement'@'%' IDENTIFIED BY 'secret';
 _EOF_
 
 source necos/vagrant/admin-openrc
@@ -26,10 +29,13 @@ openstack endpoint create --region RegionOne placement internal http://controlle
 openstack endpoint create --region RegionOne placement admin http://controller:8778 >> nova.log 2>> nova-error.log
 
 
-sudo apt -qy install nova-api nova-conductor nova-consoleauth nova-novncproxy nova-scheduler nova-placement-api >> apt-nova.log 2>> apt-nova-error.log
+sudo apt -qy install nova-api nova-conductor nova-novncproxy nova-scheduler nova-placement-api >> apt-nova.log 2>> apt-nova-error.log
 
 sudo sed -i 's/sqlite:\/\/\/\/var\/lib\/nova\/nova_api.sqlite/mysql+pymysql:\/\/nova:secret@controller\/nova_api/' /etc/nova/nova.conf
 sudo sed -i 's/sqlite:\/\/\/\/var\/lib\/nova\/nova.sqlite/mysql+pymysql:\/\/nova:secret@controller\/nova/' /etc/nova/nova.conf
+
+echo "[placement_database]" >> /etc/nova/nova.conf
+echo "connection = mysql+pymysql://placement:secret@controller/placement" >> /etc/nova/nova.conf
 
 linhadefaultnova=`sudo awk '{if ($0 == "[DEFAULT]") {print NR;}}' /etc/nova/nova.conf`
 sudo sed -i "$[linhadefaultnova+4] i\transport_url = rabbit://openstack:secret@controller" /etc/nova/nova.conf
@@ -87,7 +93,6 @@ sudo su -s /bin/sh -c "nova-manage cell_v2 create_cell --name=cell1 --verbose" n
 sudo su -s /bin/sh -c "nova-manage db sync" nova >> nova-manage.log 2>> nova-manage-error.log
 
 sudo service nova-api restart
-sudo service nova-consoleauth restart
 sudo service nova-scheduler restart
 sudo service nova-conductor restart
 sudo service nova-novncproxy restart
