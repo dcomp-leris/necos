@@ -56,7 +56,7 @@ sudo sed -i "$[linhaauthtokennova+7] i\username = nova" /etc/nova/nova.conf
 sudo sed -i "$[linhaauthtokennova+8] i\password = secret" /etc/nova/nova.conf
 
 linhavncnova=`sudo awk '{if ($0 == "[vnc]") {print NR;}}' /etc/nova/nova.conf`
-sudo sed -i "$[linhavncnova+1] i\enabled = True" /etc/nova/nova.conf
+sudo sed -i "$[linhavncnova+1] i\enabled = true" /etc/nova/nova.conf
 sudo sed -i "$[linhavncnova+2] i\server_listen = 10.0.0.11" /etc/nova/nova.conf
 sudo sed -i "$[linhavncnova+3] i\server_proxyclient_address = 10.0.0.11" /etc/nova/nova.conf
 
