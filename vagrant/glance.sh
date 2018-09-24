@@ -18,7 +18,7 @@ sudo apt -qy install glance >> apt-glance.log 2>> apt-glance-error.log
 sudo sed -i 's/sqlite:\/\/\/\/var\/lib\/glance\/glance.sqlite/mysql+pymysql:\/\/glance:secret@controller\/glance/' /etc/glance/glance-api.conf
 
 linhaauthtoken=`sudo awk '{if ($0 == "[keystone_authtoken]") {print NR;}}' /etc/glance/glance-api.conf`
-sudo sed -i "$[linhaauthtoken+1] i\auth_uri = http://controller:5000" /etc/glance/glance-api.conf
+sudo sed -i "$[linhaauthtoken+1] i\www_authenticate_uri = http://controller:5000" /etc/glance/glance-api.conf
 sudo sed -i "$[linhaauthtoken+2] i\auth_url = http://controller:5000" /etc/glance/glance-api.conf
 sudo sed -i "$[linhaauthtoken+3] i\memcached_servers = controller:11211" /etc/glance/glance-api.conf
 sudo sed -i "$[linhaauthtoken+4] i\auth_type = password" /etc/glance/glance-api.conf
@@ -39,7 +39,7 @@ sudo sed -i "$[linhastore+3] i\filesystem_store_datadir = /var/lib/glance/images
 sudo sed -i 's/sqlite:\/\/\/\/var\/lib\/glance\/glance.sqlite/mysql+pymysql:\/\/glance:secret@controller\/glance/' /etc/glance/glance-registry.conf
 
 linhaauthtoken2=`sudo awk '{if ($0 == "[keystone_authtoken]") {print NR;}}' /etc/glance/glance-registry.conf`
-sudo sed -i "$[linhaauthtoken2+1] i\auth_uri = http://controller:5000" /etc/glance/glance-registry.conf
+sudo sed -i "$[linhaauthtoken2+1] i\www_authenticate_uri = http://controller:5000" /etc/glance/glance-registry.conf
 sudo sed -i "$[linhaauthtoken2+2] i\auth_url = http://controller:5000" /etc/glance/glance-registry.conf
 sudo sed -i "$[linhaauthtoken2+3] i\memcached_servers = controller:11211" /etc/glance/glance-registry.conf
 sudo sed -i "$[linhaauthtoken2+4] i\auth_type = password" /etc/glance/glance-registry.conf
