@@ -26,7 +26,7 @@ sudo sed -i "$[linhadefaultneutron+6] i\notify_nova_on_port_status_changes = tru
 sudo sed -i "$[linhadefaultneutron+7] i\notify_nova_on_port_data_changes = true" /etc/neutron/neutron.conf
 
 linhaauthtokenneutron=`sudo awk '{if ($0 == "[keystone_authtoken]") {print NR;}}' /etc/neutron/neutron.conf`
-sudo sed -i "$[linhaauthtokenneutron+1] i\auth_uri = http://controller:5000" /etc/neutron/neutron.conf
+sudo sed -i "$[linhaauthtokenneutron+1] i\www_authenticate_uri = http://controller:5000" /etc/neutron/neutron.conf
 sudo sed -i "$[linhaauthtokenneutron+2] i\auth_url = http://controller:5000" /etc/neutron/neutron.conf
 sudo sed -i "$[linhaauthtokenneutron+3] i\memcached_servers = controller:11211" /etc/neutron/neutron.conf
 sudo sed -i "$[linhaauthtokenneutron+4] i\auth_type = password" /etc/neutron/neutron.conf
