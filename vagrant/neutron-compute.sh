@@ -7,7 +7,7 @@ sudo sed -i "$[linhadefaultneutron+2] i\transport_url = rabbit://openstack:secre
 sudo sed -i "$[linhadefaultneutron+3] i\auth_strategy = keystone" /etc/neutron/neutron.conf
 
 linhaauthtokenneutron=`sudo awk '{if ($0 == "[keystone_authtoken]") {print NR;}}' /etc/neutron/neutron.conf`
-sudo sed -i "$[linhaauthtokenneutron+1] i\auth_uri = http://controller:5000" /etc/neutron/neutron.conf
+sudo sed -i "$[linhaauthtokenneutron+1] i\www_authenticate_uri = http://controller:5000" /etc/neutron/neutron.conf
 sudo sed -i "$[linhaauthtokenneutron+2] i\auth_url = http://controller:5000" /etc/neutron/neutron.conf
 sudo sed -i "$[linhaauthtokenneutron+3] i\memcached_servers = controller:11211" /etc/neutron/neutron.conf
 sudo sed -i "$[linhaauthtokenneutron+4] i\auth_type = password" /etc/neutron/neutron.conf
