@@ -29,7 +29,7 @@ openstack endpoint create --region RegionOne placement internal http://controlle
 openstack endpoint create --region RegionOne placement admin http://controller:8778 >> nova.log 2>> nova-error.log
 
 
-sudo apt -qy install nova-api nova-conductor nova-novncproxy nova-scheduler nova-placement-api >> apt-nova.log 2>> apt-nova-error.log
+sudo apt -qy install nova-api nova-conductor nova-consoleauth nova-novncproxy nova-scheduler nova-placement-api >> apt-nova.log 2>> apt-nova-error.log
 
 sudo sed -i 's/sqlite:\/\/\/\/var\/lib\/nova\/nova_api.sqlite/mysql+pymysql:\/\/nova:secret@controller\/nova_api/' /etc/nova/nova.conf
 sudo sed -i 's/sqlite:\/\/\/\/var\/lib\/nova\/nova.sqlite/mysql+pymysql:\/\/nova:secret@controller\/nova/' /etc/nova/nova.conf
