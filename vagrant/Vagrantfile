@@ -36,43 +36,43 @@ Vagrant.configure("2") do |config|
       bash necos/vagrant/apt.sh
 
       echo "[NECOS] making /etc/hosts"
-      bash necos/vagrant/makeHosts.sh controllerSlice2IP computeSlice2IP
+      bash necos/vagrant/makeHosts.sh controllerSlice1IP computeSlice1IP passwordSlice1
 
       echo "[NECOS] installing chrony"
       bash necos/vagrant/chrony.sh
 
       echo "[NECOS] installing mariadb"
-      bash necos/vagrant/mariadb.sh
+      bash necos/vagrant/mariadb.sh controllerSlice1IP passwordSlice1
 
       echo "[NECOS] installing rabbitmq"
-      bash necos/vagrant/rabbitmq.sh
+      bash necos/vagrant/rabbitmq.sh passwordSlice1
 
       echo "[NECOS] installing memcached"
-      bash necos/vagrant/memcached.sh
+      bash necos/vagrant/memcached.sh controllerSlice1IP
 
       echo "[NECOS] installing etcd"
-      bash necos/vagrant/etcd.sh
+      bash necos/vagrant/etcd.sh controllerSlice1IP
 
       echo "[NECOS] installing keystone"
-      bash necos/vagrant/keystone.sh
+      bash necos/vagrant/keystone.sh passwordSlice1
 
       echo "[NECOS] installing glance"
-      bash necos/vagrant/glance.sh
+      bash necos/vagrant/glance.sh passwordSlice1
 
       echo "[NECOS] installing nova"
-      bash necos/vagrant/nova.sh
+      bash necos/vagrant/nova.sh controllerSlice1IP passwordSlice1
 
       echo "[NECOS] installing neutron"
-      bash necos/vagrant/neutron.sh
+      bash necos/vagrant/neutron.sh controllerSlice1IP passwordSlice1
 
       echo "[NECOS] installing horizon"
       bash necos/vagrant/horizon.sh
 
       echo "[NECOS] installing gnocchi"
-      bash necos/vagrant/gnocchi.sh
+      bash necos/vagrant/gnocchi.sh controllerSlice1IP passwordSlice1
 
       echo "[NECOS] installing ceilometer"
-      bash necos/vagrant/ceilometer.sh
+      bash necos/vagrant/ceilometer.sh passwordSlice1
 
       echo "[NECOS] moving log files"
       bash necos/vagrant/move.sh
@@ -80,7 +80,7 @@ Vagrant.configure("2") do |config|
   end
 ############### end controller block ###############
 
-############### start compute1 block ###############
+############### start computeSlice1 block ###############
   config.vm.define "computeSlice1" do |computeSlice1|
     computeSlice1.vm.box = "ubuntu/bionic64"
     computeSlice1.vm.hostname = 'computeSlice1'
@@ -109,20 +109,20 @@ Vagrant.configure("2") do |config|
       bash necos/vagrant/chrony-client.sh
 
       echo "[NECOS] installing nova"
-      bash necos/vagrant/nova-compute.sh computeSlice1IP
+      bash necos/vagrant/nova-compute.sh computeSlice1IP passwordSlice1
 
       echo "[NECOS] installing neutron"
-      bash necos/vagrant/neutron-compute.sh computeSlice1IP
+      bash necos/vagrant/neutron-compute.sh computeSlice1IP passwordSlice1
 
       echo "[NECOS] installing ceilometer"
-      bash necos/vagrant/ceilometer-compute.sh
+      bash necos/vagrant/ceilometer-compute.sh passwordSlice1
 
       echo "[NECOS] moving log files"
       bash necos/vagrant/move.sh
     SHELL
   end
 ############### end compute Slice 1 block ###############
-end	
+	
 ############### start controller Slice 2 block ###############
   config.vm.define "controllerSlice2" do |controllerSlice2|
     controllerSlice2.vm.box = "ubuntu/bionic64"
@@ -146,51 +146,51 @@ end
       bash necos/vagrant/apt.sh
 
       echo "[NECOS] making /etc/hosts"
-      bash necos/vagrant/makeHosts.sh controllerSlice2IP computeSlice2IP
+      bash necos/vagrant/makeHosts.sh controllerSlice1IP computeSlice2IP passwordSlice2
 
       echo "[NECOS] installing chrony"
       bash necos/vagrant/chrony.sh
 
       echo "[NECOS] installing mariadb"
-      bash necos/vagrant/mariadb.sh
+      bash necos/vagrant/mariadb.sh controllerSlice2IP passwordSlice2
 
       echo "[NECOS] installing rabbitmq"
-      bash necos/vagrant/rabbitmq.sh
+      bash necos/vagrant/rabbitmq.sh passwordSlice2
 
       echo "[NECOS] installing memcached"
-      bash necos/vagrant/memcached.sh
+      bash necos/vagrant/memcached.sh controllerSlice2IP
 
       echo "[NECOS] installing etcd"
-      bash necos/vagrant/etcd.sh
+      bash necos/vagrant/etcd.sh controllerSlice2IP
 
       echo "[NECOS] installing keystone"
-      bash necos/vagrant/keystone.sh
+      bash necos/vagrant/keystone.sh passwordSlice2
 
       echo "[NECOS] installing glance"
-      bash necos/vagrant/glance.sh
+      bash necos/vagrant/glance.sh passwordSlice2
 
       echo "[NECOS] installing nova"
-      bash necos/vagrant/nova.sh
+      bash necos/vagrant/nova.sh controllerSlice2IP passwordSlice2
 
       echo "[NECOS] installing neutron"
-      bash necos/vagrant/neutron.sh
+      bash necos/vagrant/neutron.sh controllerSlice2IP passwordSlice2
 
       echo "[NECOS] installing horizon"
       bash necos/vagrant/horizon.sh
 
       echo "[NECOS] installing gnocchi"
-      bash necos/vagrant/gnocchi.sh
+      bash necos/vagrant/gnocchi.sh controllerSlice2IP passwordSlice2
 
       echo "[NECOS] installing ceilometer"
-      bash necos/vagrant/ceilometer.sh
+      bash necos/vagrant/ceilometer.sh passwordSlice2
 
       echo "[NECOS] moving log files"
       bash necos/vagrant/move.sh
     SHELL
   end
-############### end controller block ###############
+############### end controller Slice 2 block ###############
 
-############### start compute1 block ###############
+############### start compute Slice 2 block ###############
   config.vm.define "computeSlice2" do |computeSlice2|
     computeSlice2.vm.box = "ubuntu/bionic64"
     computeSlice2.vm.hostname = 'computeSlice2'
@@ -219,20 +219,17 @@ end
       bash necos/vagrant/chrony-client.sh
 
       echo "[NECOS] installing nova"
-      bash necos/vagrant/nova-compute.sh computeSlice2IP
+      bash necos/vagrant/nova-compute.sh computeSlice2IP passwordSlice2
 
       echo "[NECOS] installing neutron"
-      bash necos/vagrant/neutron-compute.sh computeSlice2IP
+      bash necos/vagrant/neutron-compute.sh computeSlice2IP passwordSlice2
 
       echo "[NECOS] installing ceilometer"
-      bash necos/vagrant/ceilometer-compute.sh
+      bash necos/vagrant/ceilometer-compute.sh passwordSlice2
 
       echo "[NECOS] moving log files"
       bash necos/vagrant/move.sh
     SHELL
   end
-############### end compute1 block ###############
-end	
-
-
-
+############### end compute Slice 2 block ###############
+end
