@@ -11,9 +11,9 @@ sudo service mysql restart
 if [ $? -ne 0 ]; then echo "NECOS: error"; fi
 
 sudo mysql --user=root <<_EOF_
-UPDATE mysql.user SET plugin='', Password=PASSWORD("$2") WHERE User='root';
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY "$2";
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY "$2";
+UPDATE mysql.user SET plugin='', Password=PASSWORD('$2') WHERE User='root';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY '$2';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '$2';
 DELETE FROM mysql.user WHERE User='';
 DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
 DROP DATABASE IF EXISTS test;
