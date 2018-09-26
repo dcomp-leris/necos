@@ -6,7 +6,7 @@ sudo apt install -qy ceilometer-agent-notification ceilometer-agent-central >> c
 sudo chmod 777 /etc/ceilometer/ceilometer.conf
 
 linhaDefault=`sudo awk '{if ($0 == "[DEFAULT]") {print NR;}}' /etc/ceilometer/ceilometer.conf`
-sudo sed -i "$[linhaDefault+2] i\transport_url = rabbit://openstack:secret@controller" /etc/ceilometer/ceilometer.conf
+sudo sed -i "$[linhaDefault+2] i\transport_url = rabbit://openstack:$2@controller" /etc/ceilometer/ceilometer.conf
 
 linhaCredentials=`sudo awk '{if ($0 == "[service_credentials]") {print NR;}}' /etc/ceilometer/ceilometer.conf`
 sudo sed -i "$[linhaCredentials+1] i\auth_type = password" /etc/ceilometer/ceilometer.conf
@@ -15,7 +15,7 @@ sudo sed -i "$[linhaCredentials+3] i\project_domain_id = default" /etc/ceilomete
 sudo sed -i "$[linhaCredentials+4] i\user_domain_id = default" /etc/ceilometer/ceilometer.conf
 sudo sed -i "$[linhaCredentials+5] i\project_name = service" /etc/ceilometer/ceilometer.conf
 sudo sed -i "$[linhaCredentials+6] i\username = ceilometer" /etc/ceilometer/ceilometer.conf
-sudo sed -i "$[linhaCredentials+7] i\password = secret" /etc/ceilometer/ceilometer.conf
+sudo sed -i "$[linhaCredentials+7] i\password = $2" /etc/ceilometer/ceilometer.conf
 sudo sed -i "$[linhaCredentials+8] i\interface = internalURL" /etc/ceilometer/ceilometer.conf
 sudo sed -i "$[linhaCredentials+9] i\region_name = RegionOne" /etc/ceilometer/ceilometer.conf
 

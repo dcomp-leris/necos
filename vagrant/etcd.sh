@@ -6,11 +6,11 @@ sudo sh -c "echo 'name: controller' >> /etc/etcd/etcd.conf.yml"
 sudo sh -c "echo 'data-dir: /var/lib/etcd' >> /etc/etcd/etcd.conf.yml"
 sudo sh -c "echo 'initial-cluster-state: new' >> /etc/etcd/etcd.conf.yml"
 sudo sh -c "echo 'initial-cluster-token: etcd-cluster-01' >> /etc/etcd/etcd.conf.yml"
-sudo sh -c "echo 'initial-cluster: controller=http://10.0.0.11:2380' >> /etc/etcd/etcd.conf.yml"
-sudo sh -c "echo 'initial-advertise-peer-urls: http://10.0.0.11:2380' >> /etc/etcd/etcd.conf.yml"
-sudo sh -c "echo 'advertise-client-urls: http://10.0.0.11:2379' >> /etc/etcd/etcd.conf.yml"
+sudo sh -c "echo 'initial-cluster: controller=http://$1:2380' >> /etc/etcd/etcd.conf.yml"
+sudo sh -c "echo 'initial-advertise-peer-urls: http://$1:2380' >> /etc/etcd/etcd.conf.yml"
+sudo sh -c "echo 'advertise-client-urls: http://$1:2379' >> /etc/etcd/etcd.conf.yml"
 sudo sh -c "echo 'listen-peer-urls: http://0.0.0.0:2380' >> /etc/etcd/etcd.conf.yml"
-sudo sh -c "echo 'listen-client-urls: http://10.0.0.11:2379' >> /etc/etcd/etcd.conf.yml"
+sudo sh -c "echo 'listen-client-urls: http://$1:2379' >> /etc/etcd/etcd.conf.yml"
 
 sudo sed -i "s/new/\'new\'/" /etc/etcd/etcd.conf.yml
 sudo sed -i "s/etcd-cluster-01/\'etcd-cluster-01\'/" /etc/etcd/etcd.conf.yml

@@ -1,6 +1,6 @@
 127.0.0.1	localhost
 # controller
-10.0.0.11       controller
+$1       controller
 # compute1 and compute2
 10.0.0.31       compute1
 10.0.0.32       compute2
