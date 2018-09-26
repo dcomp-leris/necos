@@ -48,7 +48,7 @@ sudo sed -i "$[linhaauthtokengnocchi+8] i\password = $2" /etc/gnocchi/gnocchi.co
 sudo sed -i "$[linhaauthtokengnocchi+9] i\interface = internalURL" /etc/gnocchi/gnocchi.conf
 sudo sed -i "$[linhaauthtokengnocchi+10] i\region_name = RegionOne" /etc/gnocchi/gnocchi.conf
 
-sudo sed -i 's*#url = <None>*url = mysql+pymysql://gnocchi:$2@controller/gnocchi*' /etc/gnocchi/gnocchi.conf
+sudo sed -i "s*#url = <None>*url = mysql+pymysql://gnocchi:$2@controller/gnocchi*" /etc/gnocchi/gnocchi.conf
 
 linhastoragegnocchi=`sudo awk '{if ($0 == "[storage]") {print NR;}}' /etc/gnocchi/gnocchi.conf`
 sudo sed -i "$[linhastoragegnocchi+1] i\file_basepath = /var/lib/gnocchi" /etc/gnocchi/gnocchi.conf
