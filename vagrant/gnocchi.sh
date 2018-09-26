@@ -89,5 +89,5 @@ _EOF_
 sudo ln -s /etc/init.d/gnocchi-api /etc/rc3.d/S99gnocchi-metricd
 
 
-gnocchi-api --noverbose --log-file gnocchi-api2.log --config-file /etc/gnocchi/gnocchi.conf >> gnocchi-api.log 2>> gnocchi-api-error.log &
-gnocchi-metricd --noverbose --log-file gnocchi-metricd2.log --config-file /etc/gnocchi/gnocchi.conf >> gnocchi-metricd.log 2>> gnocchi-metricd-error.log &
+gnocchi-api --noverbose --log-file gnocchi-api2.log2 --config-file /etc/gnocchi/gnocchi.conf >> gnocchi-api.log 2>> gnocchi-api-error.log &
+gnocchi-metricd --noverbose --log-file gnocchi-metricd2.log2 --config-file /etc/gnocchi/gnocchi.conf >> gnocchi-metricd.log 2>> gnocchi-metricd-error.log &
