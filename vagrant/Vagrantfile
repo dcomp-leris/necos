@@ -36,7 +36,7 @@ Vagrant.configure("2") do |config|
       bash necos/vagrant/apt.sh
 
       echo "[NECOS] making /etc/hosts"
-      bash necos/vagrant/makeHosts.sh controllerSlice1IP $2 $3
+      bash necos/vagrant/makeHosts.sh $1 $2 $3
 
       echo "[NECOS] installing chrony"
       bash necos/vagrant/chrony.sh
