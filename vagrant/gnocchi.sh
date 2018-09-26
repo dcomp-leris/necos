@@ -12,7 +12,7 @@ openstack endpoint create --region RegionOne metric admin http://controller:8041
 sudo apt -qy install redis >> apt-redis.log 2>> apt-redis-error.log
 
 sudo chmod 755 /etc/redis/redis.conf
-sudo sed -i 's/bind 127.0.0.1 ::1/bind $1 ::1/' /etc/redis/redis.conf
+sudo sed -i "s/bind 127.0.0.1 ::1/bind $1/" /etc/redis/redis.conf
 sudo service redis restart
 
 
