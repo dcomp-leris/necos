@@ -15,7 +15,7 @@ openstack endpoint create --region RegionOne image admin http://controller:9292 
 
 sudo apt -qy install glance >> apt-glance.log 2>> apt-glance-error.log
 
-sudo sed -i 's/sqlite:\/\/\/\/var\/lib\/glance\/glance.sqlite/mysql+pymysql:\/\/glance:$1@controller\/glance/' /etc/glance/glance-api.conf
+sudo sed -i "s/sqlite:\/\/\/\/var\/lib\/glance\/glance.sqlite/mysql+pymysql:\/\/glance:$1@controller\/glance/" /etc/glance/glance-api.conf
 
 linhaauthtoken=`sudo awk '{if ($0 == "[keystone_authtoken]") {print NR;}}' /etc/glance/glance-api.conf`
 sudo sed -i "$[linhaauthtoken+1] i\www_authenticate_uri = http://controller:5000" /etc/glance/glance-api.conf
@@ -36,7 +36,7 @@ sudo sed -i "$[linhastore+1] i\stores = file,http" /etc/glance/glance-api.conf
 sudo sed -i "$[linhastore+2] i\default_stores = file" /etc/glance/glance-api.conf
 sudo sed -i "$[linhastore+3] i\filesystem_store_datadir = /var/lib/glance/images/" /etc/glance/glance-api.conf
 
-sudo sed -i 's/sqlite:\/\/\/\/var\/lib\/glance\/glance.sqlite/mysql+pymysql:\/\/glance:$1@controller\/glance/' /etc/glance/glance-registry.conf
+sudo sed -i "s/sqlite:\/\/\/\/var\/lib\/glance\/glance.sqlite/mysql+pymysql:\/\/glance:$1@controller\/glance/" /etc/glance/glance-registry.conf
 
 linhaauthtoken2=`sudo awk '{if ($0 == "[keystone_authtoken]") {print NR;}}' /etc/glance/glance-registry.conf`
 sudo sed -i "$[linhaauthtoken2+1] i\www_authenticate_uri = http://controller:5000" /etc/glance/glance-registry.conf

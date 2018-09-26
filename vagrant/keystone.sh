@@ -11,7 +11,7 @@ sudo apt -qy install keystone >> apt-keystone.log 2>> apt-keystone-error.log
 sudo apt -qy install python-oauth2client >> apt-oauth2client.log 2>> apt-oauth2client-error.log
 
 sudo sed -i 's/^#memcache_servers = localhost:11211/memcache_servers = controller:11211/' /etc/keystone/keystone.conf
-sudo sed -i 's/sqlite:\/\/\/\/var\/lib\/keystone\/keystone.db/mysql+pymysql:\/\/keystone:$1@controller\/keystone/' /etc/keystone/keystone.conf
+sudo sed -i "s/sqlite:\/\/\/\/var\/lib\/keystone\/keystone.db/mysql+pymysql:\/\/keystone:$1@controller\/keystone/" /etc/keystone/keystone.conf
 linhakeystone=`sudo awk '{if ($0 == "[token]") {print NR;}}' /etc/keystone/keystone.conf`
 sudo sed -i "$[linhakeystone+1] i\provider = fernet" /etc/keystone/keystone.conf
 
