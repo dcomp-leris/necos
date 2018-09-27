@@ -15,7 +15,7 @@ openstack endpoint create --region RegionOne network admin http://controller:969
 
 sudo apt -qy install neutron-server neutron-plugin-ml2 neutron-linuxbridge-agent neutron-dhcp-agent neutron-metadata-agent >> apt-neutron.log 2>> apt-neutron-error.log
 
-sudo sed -i 's/sqlite:\/\/\/\/var\/lib\/neutron\/neutron.sqlite/mysql+pymysql:\/\/neutron:$2@controller\/neutron/' /etc/neutron/neutron.conf
+sudo sed -i "s/sqlite:\/\/\/\/var\/lib\/neutron\/neutron.sqlite/mysql+pymysql:\/\/neutron:$2@controller\/neutron/" /etc/neutron/neutron.conf
 
 linhadefaultneutron=`sudo awk '{if ($0 == "[DEFAULT]") {print NR;}}' /etc/neutron/neutron.conf`
 sudo sed -i "$[linhadefaultneutron+2] i\service_plugins = " /etc/neutron/neutron.conf
