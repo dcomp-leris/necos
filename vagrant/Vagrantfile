@@ -38,8 +38,8 @@ Vagrant.configure("2") do |config|
       echo "[NECOS] making /etc/hosts"
       bash necos/vagrant/makeHosts.sh $1 $2
 
-      echo "[NECOS] updating openrc files"
-      bash necos/vagrant/updatingOpenrc.sh $3
+      echo "[NECOS] making openrc files"
+      bash necos/vagrant/makingOpenrc.sh $3
 
       echo "[NECOS] installing chrony"
       bash necos/vagrant/chrony.sh
@@ -108,8 +108,8 @@ Vagrant.configure("2") do |config|
       echo "[NECOS] making /etc/hosts"
       bash necos/vagrant/makeHosts.sh $1 $2
 
-      echo "[NECOS] updating openrc files"
-      bash necos/vagrant/updatingOpenrc.sh $3
+      echo "[NECOS] making openrc files"
+      bash necos/vagrant/makingOpenrc.sh $3
 
       echo "[NECOS] installing chrony"
       bash necos/vagrant/chrony-client.sh
