@@ -36,7 +36,7 @@ Vagrant.configure("2") do |config|
       bash necos/vagrant/apt.sh
 
       echo "[NECOS] making /etc/hosts"
-      bash necos/vagrant/makeHosts.sh $1 $2 $3
+      bash necos/vagrant/makeHosts.sh $1 $2
 
       echo "[NECOS] installing chrony"
       bash necos/vagrant/chrony.sh
@@ -68,11 +68,11 @@ Vagrant.configure("2") do |config|
       echo "[NECOS] installing horizon"
       bash necos/vagrant/horizon.sh
 
-      echo "[NECOS] installing gnocchi"
-      bash necos/vagrant/gnocchi.sh $1 $3
+      #echo "[NECOS] installing gnocchi"
+      #bash necos/vagrant/gnocchi.sh $1 $3
 
-      echo "[NECOS] installing ceilometer"
-      bash necos/vagrant/ceilometer.sh $3
+      #echo "[NECOS] installing ceilometer"
+      #bash necos/vagrant/ceilometer.sh $3
 
       echo "[NECOS] moving log files"
       bash necos/vagrant/move.sh
@@ -114,8 +114,8 @@ Vagrant.configure("2") do |config|
       echo "[NECOS] installing neutron"
       bash necos/vagrant/neutron-compute.sh $2 $3
 
-      echo "[NECOS] installing ceilometer"
-      bash necos/vagrant/ceilometer-compute.sh $3
+      #echo "[NECOS] installing ceilometer"
+      #bash necos/vagrant/ceilometer-compute.sh $3
 
       echo "[NECOS] moving log files"
       bash necos/vagrant/move.sh
