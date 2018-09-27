@@ -1,15 +1,14 @@
-sudo apt -qy install nova-common >> apt-nova-common.log 2>> apt-nova-common-error.log
+#sudo apt -qy install nova-common >> apt-nova-common.log 2>> apt-nova-common-error.log
 sudo apt -qy install nova-compute >> apt-nova-compute.log 2>> apt-nova-compute-error.log
 
-HOST_IP=$1
 linhadefaultnova=`sudo awk '{if ($0 == "[DEFAULT]") {print NR;}}' /etc/nova/nova.conf`
 sudo sed -i "$[linhadefaultnova+4] i\transport_url = rabbit://openstack:$2@controller" /etc/nova/nova.conf
-sudo sed -i "$[linhadefaultnova+5] i\my_ip = ${HOST_IP}" /etc/nova/nova.conf
-sudo sed -i "$[linhadefaultnova+6] i\use_neutron = True" /etc/nova/nova.conf
+sudo sed -i "$[linhadefaultnova+5] i\my_ip = $1" /etc/nova/nova.conf
+sudo sed -i "$[linhadefaultnova+6] i\use_neutron = true" /etc/nova/nova.conf
 sudo sed -i "$[linhadefaultnova+7] i\firewall_driver = nova.virt.firewall.NoopFirewallDriver" /etc/nova/nova.conf
 
 linhavncnova=`sudo awk '{if ($0 == "[vnc]") {print NR;}}' /etc/nova/nova.conf`
-sudo sed -i "$[linhavncnova+1] i\enabled = True" /etc/nova/nova.conf
+sudo sed -i "$[linhavncnova+1] i\enabled = true" /etc/nova/nova.conf
 sudo sed -i "$[linhavncnova+2] i\server_listen = 0.0.0.0" /etc/nova/nova.conf
 sudo sed -i "$[linhavncnova+3] i\server_proxyclient_address = ${HOST_IP}" /etc/nova/nova.conf
 sudo sed -i "$[linhavncnova+4] i\snovncproxy_base_url = http://controller:6080/vnc_auto.html" /etc/nova/nova.conf
@@ -44,7 +43,7 @@ sudo sed -i "$[linhaplacementnova+6] i\auth_url = http://controller:5000/v3" /et
 sudo sed -i "$[linhaplacementnova+7] i\username = placement" /etc/nova/nova.conf
 sudo sed -i "$[linhaplacementnova+8] i\password = $2" /etc/nova/nova.conf
 
-sudo sed -i 's/^enable = False/#enable = False/' /etc/nova/nova.conf
+#sudo sed -i 's/^enable = False/#enable = False/' /etc/nova/nova.conf
 
 sudo sed -i 's/kvm/qemu/' /etc/nova/nova-compute.conf
 

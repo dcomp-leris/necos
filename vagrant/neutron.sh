@@ -13,17 +13,18 @@ openstack endpoint create --region RegionOne network public http://controller:96
 openstack endpoint create --region RegionOne network internal http://controller:9696 >> neutron.log 2>> neutron-error.log
 openstack endpoint create --region RegionOne network admin http://controller:9696 >> neutron.log 2>> neutron-error.log
 
-sudo apt -qy install neutron-server neutron-plugin-ml2 neutron-linuxbridge-agent neutron-l3-agent neutron-dhcp-agent neutron-metadata-agent >> apt-neutron.log 2>> apt-neutron-error.log
+sudo apt -qy install neutron-server neutron-plugin-ml2 neutron-linuxbridge-agent neutron-dhcp-agent neutron-metadata-agent >> apt-neutron.log 2>> apt-neutron-error.log
 
 sudo sed -i 's/sqlite:\/\/\/\/var\/lib\/neutron\/neutron.sqlite/mysql+pymysql:\/\/neutron:$2@controller\/neutron/' /etc/neutron/neutron.conf
 
 linhadefaultneutron=`sudo awk '{if ($0 == "[DEFAULT]") {print NR;}}' /etc/neutron/neutron.conf`
-sudo sed -i "$[linhadefaultneutron+2] i\service_plugins = router" /etc/neutron/neutron.conf
-sudo sed -i "$[linhadefaultneutron+3] i\allow_overlapping_ips = true" /etc/neutron/neutron.conf
-sudo sed -i "$[linhadefaultneutron+4] i\transport_url = rabbit://openstack:$2@controller" /etc/neutron/neutron.conf
-sudo sed -i "$[linhadefaultneutron+5] i\auth_strategy = keystone" /etc/neutron/neutron.conf
-sudo sed -i "$[linhadefaultneutron+6] i\notify_nova_on_port_status_changes = true" /etc/neutron/neutron.conf
-sudo sed -i "$[linhadefaultneutron+7] i\notify_nova_on_port_data_changes = true" /etc/neutron/neutron.conf
+sudo sed -i "$[linhadefaultneutron+2] i\service_plugins = " /etc/neutron/neutron.conf
+sudo sed -i "$[linhadefaultneutron+3] i\core_plugin = ml2" /etc/neutron/neutron.conf
+sudo sed -i "$[linhadefaultneutron+4] i\allow_overlapping_ips = true" /etc/neutron/neutron.conf
+sudo sed -i "$[linhadefaultneutron+5] i\transport_url = rabbit://openstack:$2@controller" /etc/neutron/neutron.conf
+sudo sed -i "$[linhadefaultneutron+6] i\auth_strategy = keystone" /etc/neutron/neutron.conf
+sudo sed -i "$[linhadefaultneutron+7] i\notify_nova_on_port_status_changes = true" /etc/neutron/neutron.conf
+sudo sed -i "$[linhadefaultneutron+8] i\notify_nova_on_port_data_changes = true" /etc/neutron/neutron.conf
 
 linhaauthtokenneutron=`sudo awk '{if ($0 == "[keystone_authtoken]") {print NR;}}' /etc/neutron/neutron.conf`
 sudo sed -i "$[linhaauthtokenneutron+1] i\www_authenticate_uri = http://controller:5000" /etc/neutron/neutron.conf
@@ -47,34 +48,34 @@ sudo sed -i "$[linhanovaneutron+7] i\username = nova" /etc/neutron/neutron.conf
 sudo sed -i "$[linhanovaneutron+8] i\password = $2" /etc/neutron/neutron.conf
 
 linhaml2neutron=`sudo awk '{if ($0 == "[ml2]") {print NR;}}' /etc/neutron/plugins/ml2/ml2_conf.ini`
-sudo sed -i "$[linhaml2neutron+1] i\type_drivers = flat,vlan,vxlan" /etc/neutron/plugins/ml2/ml2_conf.ini
-sudo sed -i "$[linhaml2neutron+2] i\tenant_network_types = vxlan" /etc/neutron/plugins/ml2/ml2_conf.ini
-sudo sed -i "$[linhaml2neutron+3] i\mechanism_drivers = linuxbridge,l2population" /etc/neutron/plugins/ml2/ml2_conf.ini
+sudo sed -i "$[linhaml2neutron+1] i\type_drivers = flat,vlan" /etc/neutron/plugins/ml2/ml2_conf.ini
+#sudo sed -i "$[linhaml2neutron+2] i\tenant_network_types = vxlan" /etc/neutron/plugins/ml2/ml2_conf.ini
+sudo sed -i "$[linhaml2neutron+3] i\mechanism_drivers = linuxbridge" /etc/neutron/plugins/ml2/ml2_conf.ini
 sudo sed -i "$[linhaml2neutron+4] i\extension_drivers = port_security" /etc/neutron/plugins/ml2/ml2_conf.ini
 
 linhaml2flatneutron=`sudo awk '{if ($0 == "[ml2_type_flat]") {print NR;}}' /etc/neutron/plugins/ml2/ml2_conf.ini`
 sudo sed -i "$[linhaml2flatneutron+1] i\flat_networks = provider" /etc/neutron/plugins/ml2/ml2_conf.ini
 
-linhaml2vxlanneutron=`sudo awk '{if ($0 == "[ml2_type_vxlan]") {print NR;}}' /etc/neutron/plugins/ml2/ml2_conf.ini`
-sudo sed -i "$[linhaml2vxlanneutron+1] i\vni_ranges = 1:1000" /etc/neutron/plugins/ml2/ml2_conf.ini
+#linhaml2vxlanneutron=`sudo awk '{if ($0 == "[ml2_type_vxlan]") {print NR;}}' /etc/neutron/plugins/ml2/ml2_conf.ini`
+#sudo sed -i "$[linhaml2vxlanneutron+1] i\vni_ranges = 1:1000" /etc/neutron/plugins/ml2/ml2_conf.ini
 
 linhasecuritygroupneutron=`sudo awk '{if ($0 == "[securitygroup]") {print NR;}}' /etc/neutron/plugins/ml2/ml2_conf.ini`
 sudo sed -i "$[linhasecuritygroupneutron+1] i\enable_ipset = true" /etc/neutron/plugins/ml2/ml2_conf.ini
 
 linhalinuxbridgeneutron=`sudo awk '{if ($0 == "[linux_bridge]") {print NR;}}' /etc/neutron/plugins/ml2/linuxbridge_agent.ini`
-sudo sed -i "$[linhalinuxbridgeneutron+1] i\physical_interface_mappings = provider:enp0s9" /etc/neutron/plugins/ml2/linuxbridge_agent.ini
+sudo sed -i "$[linhalinuxbridgeneutron+1] i\physical_interface_mappings = provider:enp0s8" /etc/neutron/plugins/ml2/linuxbridge_agent.ini
 
 linhavxlanneutron=`sudo awk '{if ($0 == "[vxlan]") {print NR;}}' /etc/neutron/plugins/ml2/linuxbridge_agent.ini`
-sudo sed -i "$[linhavxlanneutron+1] i\enable_vxlan = true" /etc/neutron/plugins/ml2/linuxbridge_agent.ini
-sudo sed -i "$[linhavxlanneutron+2] i\local_ip = $1" /etc/neutron/plugins/ml2/linuxbridge_agent.ini
-sudo sed -i "$[linhavxlanneutron+3] i\l2_population = true" /etc/neutron/plugins/ml2/linuxbridge_agent.ini
+sudo sed -i "$[linhavxlanneutron+1] i\enable_vxlan = false" /etc/neutron/plugins/ml2/linuxbridge_agent.ini
+#sudo sed -i "$[linhavxlanneutron+2] i\local_ip = $1" /etc/neutron/plugins/ml2/linuxbridge_agent.ini
+#sudo sed -i "$[linhavxlanneutron+3] i\l2_population = true" /etc/neutron/plugins/ml2/linuxbridge_agent.ini
 
 linhasecuritybridgeneutron=`sudo awk '{if ($0 == "[securitygroup]") {print NR;}}' /etc/neutron/plugins/ml2/linuxbridge_agent.ini`
 sudo sed -i "$[linhasecuritybridgeneutron+1] i\enable_security_group = true" /etc/neutron/plugins/ml2/linuxbridge_agent.ini
 sudo sed -i "$[linhasecuritybridgeneutron+2] i\firewall_driver = neutron.agent.linux.iptables_firewall.IptablesFirewallDriver" /etc/neutron/plugins/ml2/linuxbridge_agent.ini
 
-linhadefaultl3neutron=`sudo awk '{if ($0 == "[DEFAULT]") {print NR;}}' /etc/neutron/l3_agent.ini`
-sudo sed -i "$[linhadefaultl3neutron+1] i\interface_driver = linuxbridge" /etc/neutron/l3_agent.ini
+#linhadefaultl3neutron=`sudo awk '{if ($0 == "[DEFAULT]") {print NR;}}' /etc/neutron/l3_agent.ini`
+#sudo sed -i "$[linhadefaultl3neutron+1] i\interface_driver = linuxbridge" /etc/neutron/l3_agent.ini
 
 linhadefaultdhcpneutron=`sudo awk '{if ($0 == "[DEFAULT]") {print NR;}}' /etc/neutron/dhcp_agent.ini`
 sudo sed -i "$[linhadefaultdhcpneutron+1] i\interface_driver = linuxbridge" /etc/neutron/dhcp_agent.ini
@@ -96,7 +97,7 @@ sudo sed -i "$[linhaneutronnova+7] i\project_name = service" /etc/nova/nova.conf
 sudo sed -i "$[linhaneutronnova+8] i\username = neutron" /etc/nova/nova.conf
 sudo sed -i "$[linhaneutronnova+9] i\password = $2" /etc/nova/nova.conf
 sudo sed -i "$[linhaneutronnova+10] i\service_metadata_proxy = true" /etc/nova/nova.conf
-sudo sed -i "$[linhaneutronnova+11] i\metadata_proxy_shared_$2 = $2" /etc/nova/nova.conf
+sudo sed -i "$[linhaneutronnova+11] i\metadata_proxy_shared_secret = $2" /etc/nova/nova.conf
 
 sudo su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" neutron >> neutron-db-manage.log 2>> neutron-db-manage-error.log
 
@@ -110,5 +111,4 @@ sudo service neutron-dhcp-agent restart
 if [ $? -ne 0 ]; then echo "NECOS: error"; fi
 sudo service neutron-metadata-agent restart
 if [ $? -ne 0 ]; then echo "NECOS: error"; fi
-sudo service neutron-l3-agent restart
-if [ $? -ne 0 ]; then echo "NECOS: error"; fi
+

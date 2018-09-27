@@ -6,8 +6,8 @@ FLUSH PRIVILEGES;
 _EOF_
 
 sudo apt -qy install keystone >> apt-keystone.log 2>> apt-keystone-error.log
-#sudo apt -qy install apache2 >> apt-apache2.log 2>> apt-apache2-error.log
-#sudo apt -qy install libapache2-mod-wsgi >> apt-libapache2.log 2>> apt-libapache2-error.log
+sudo apt -qy install apache2 >> apt-apache2.log 2>> apt-apache2-error.log
+sudo apt -qy install libapache2-mod-wsgi >> apt-libapache2.log 2>> apt-libapache2-error.log
 sudo apt -qy install python-oauth2client >> apt-oauth2client.log 2>> apt-oauth2client-error.log
 
 sudo sed -i 's/^#memcache_servers = localhost:11211/memcache_servers = controller:11211/' /etc/keystone/keystone.conf
@@ -15,7 +15,7 @@ sudo sed -i "s/sqlite:\/\/\/\/var\/lib\/keystone\/keystone.db/mysql+pymysql:\/\/
 linhakeystone=`sudo awk '{if ($0 == "[token]") {print NR;}}' /etc/keystone/keystone.conf`
 sudo sed -i "$[linhakeystone+1] i\provider = fernet" /etc/keystone/keystone.conf
 
-sudo su -s /bin/sh -c "keystone-manage db_sync" keystone 
+sudo su -s /bin/sh -c "keystone-manage db_sync" keystone
 sudo keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
 sudo keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
 

@@ -40,7 +40,7 @@ echo "connection = mysql+pymysql://placement:$2@controller/placement" >> /etc/no
 linhadefaultnova=`sudo awk '{if ($0 == "[DEFAULT]") {print NR;}}' /etc/nova/nova.conf`
 sudo sed -i "$[linhadefaultnova+4] i\transport_url = rabbit://openstack:$2@controller" /etc/nova/nova.conf
 sudo sed -i "$[linhadefaultnova+5] i\my_ip = $1" /etc/nova/nova.conf
-sudo sed -i "$[linhadefaultnova+6] i\use_neutron = True" /etc/nova/nova.conf
+sudo sed -i "$[linhadefaultnova+6] i\use_neutron = true" /etc/nova/nova.conf
 sudo sed -i "$[linhadefaultnova+7] i\firewall_driver = nova.virt.firewall.NoopFirewallDriver" /etc/nova/nova.conf
 
 sudo sed -i 's/#auth_strategy = keystone/auth_strategy = keystone/' /etc/nova/nova.conf

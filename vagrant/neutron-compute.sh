@@ -18,13 +18,13 @@ sudo sed -i "$[linhaauthtokenneutron+8] i\username = neutron" /etc/neutron/neutr
 sudo sed -i "$[linhaauthtokenneutron+9] i\password = $2" /etc/neutron/neutron.conf
 
 linhalinuxbridgeneutron=`sudo awk '{if ($0 == "[linux_bridge]") {print NR;}}' /etc/neutron/plugins/ml2/linuxbridge_agent.ini`
-sudo sed -i "$[linhalinuxbridgeneutron+1] i\physical_interface_mappings = provider:enp0s9" /etc/neutron/plugins/ml2/linuxbridge_agent.ini
+sudo sed -i "$[linhalinuxbridgeneutron+1] i\physical_interface_mappings = provider:enp0s8" /etc/neutron/plugins/ml2/linuxbridge_agent.ini
 
-HOST_IP=$1
+
 linhavxlanneutron=`sudo awk '{if ($0 == "[vxlan]") {print NR;}}' /etc/neutron/plugins/ml2/linuxbridge_agent.ini`
-sudo sed -i "$[linhavxlanneutron+1] i\enable_vxlan = true" /etc/neutron/plugins/ml2/linuxbridge_agent.ini
-sudo sed -i "$[linhavxlanneutron+2] i\local_ip = ${HOST_IP}" /etc/neutron/plugins/ml2/linuxbridge_agent.ini
-sudo sed -i "$[linhavxlanneutron+3] i\l2_population = true" /etc/neutron/plugins/ml2/linuxbridge_agent.ini
+sudo sed -i "$[linhavxlanneutron+1] i\enable_vxlan = false" /etc/neutron/plugins/ml2/linuxbridge_agent.ini
+#sudo sed -i "$[linhavxlanneutron+2] i\local_ip = $1" /etc/neutron/plugins/ml2/linuxbridge_agent.ini
+#sudo sed -i "$[linhavxlanneutron+3] i\l2_population = true" /etc/neutron/plugins/ml2/linuxbridge_agent.ini
 
 linhasecuritybridgeneutron=`sudo awk '{if ($0 == "[securitygroup]") {print NR;}}' /etc/neutron/plugins/ml2/linuxbridge_agent.ini`
 sudo sed -i "$[linhasecuritybridgeneutron+1] i\enable_security_group = true" /etc/neutron/plugins/ml2/linuxbridge_agent.ini
