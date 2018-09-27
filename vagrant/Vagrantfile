@@ -38,6 +38,9 @@ Vagrant.configure("2") do |config|
       echo "[NECOS] making /etc/hosts"
       bash necos/vagrant/makeHosts.sh $1 $2
 
+      echo "[NECOS] updating openrc files"
+      bash necos/vagrant/updatingOpenrc.sh $3
+
       echo "[NECOS] installing chrony"
       bash necos/vagrant/chrony.sh
 
@@ -105,6 +108,9 @@ Vagrant.configure("2") do |config|
       echo "[NECOS] making /etc/hosts"
       bash necos/vagrant/makeHosts.sh $1 $2
 
+      echo "[NECOS] updating openrc files"
+      bash necos/vagrant/updatingOpenrc.sh $3
+
       echo "[NECOS] installing chrony"
       bash necos/vagrant/chrony-client.sh
 
@@ -122,114 +128,4 @@ Vagrant.configure("2") do |config|
     SHELL
   end
 ############### end compute Slice 1 block ###############
-	
-############### start controller Slice 2 block ###############
-  config.vm.define "controllerSlice2" do |controllerSlice2|
-    controllerSlice2.vm.box = "ubuntu/bionic64"
-    controllerSlice2.vm.hostname = 'controllerSlice2'
-    controllerSlice2.vm.network "private_network", ip: controllerSlice2IP
-    controllerSlice2.vm.network "public_network"
-
-    controllerSlice2.vm.provider "virtualbox" do |vb|
-      vb.memory = "6144"
-      vb.cpus = "2"
-      #vb.customize [ "modifyvm", :id, "--uartmode1", "disconnected" ]
-    end
-  
-    controllerSlice2.vm.provision "shell", inline: <<-SHELL
-      echo "[NECOS] git cloning necos.git"
-      git clone -b andre https://github.com/dcomp-leris/necos.git --quiet
-      if [ $? -ne 0 ]; then echo "[NECOS] error"; fi
-      chown -R vagrant.vagrant necos
-
-      echo "[NECOS] apt upgrading"
-      bash necos/vagrant/apt.sh
-
-      echo "[NECOS] making /etc/hosts"
-      bash necos/vagrant/makeHosts.sh $1 computeSlice2IP passwordSlice2
-
-      echo "[NECOS] installing chrony"
-      bash necos/vagrant/chrony.sh
-
-      echo "[NECOS] installing mariadb"
-      bash necos/vagrant/mariadb.sh controllerSlice2IP passwordSlice2
-
-      echo "[NECOS] installing rabbitmq"
-      bash necos/vagrant/rabbitmq.sh passwordSlice2
-
-      echo "[NECOS] installing memcached"
-      bash necos/vagrant/memcached.sh controllerSlice2IP
-
-      echo "[NECOS] installing etcd"
-      bash necos/vagrant/etcd.sh controllerSlice2IP
-
-      echo "[NECOS] installing keystone"
-      bash necos/vagrant/keystone.sh passwordSlice2
-
-      echo "[NECOS] installing glance"
-      bash necos/vagrant/glance.sh passwordSlice2
-
-      echo "[NECOS] installing nova"
-      bash necos/vagrant/nova.sh controllerSlice2IP passwordSlice2
-
-      echo "[NECOS] installing neutron"
-      bash necos/vagrant/neutron.sh controllerSlice2IP passwordSlice2
-
-      echo "[NECOS] installing horizon"
-      bash necos/vagrant/horizon.sh
-
-      echo "[NECOS] installing gnocchi"
-      bash necos/vagrant/gnocchi.sh controllerSlice2IP passwordSlice2
-
-      echo "[NECOS] installing ceilometer"
-      bash necos/vagrant/ceilometer.sh passwordSlice2
-
-      echo "[NECOS] moving log files"
-      bash necos/vagrant/move.sh
-    SHELL
-  end
-############### end controller Slice 2 block ###############
-
-############### start compute Slice 2 block ###############
-  config.vm.define "computeSlice2" do |computeSlice2|
-    computeSlice2.vm.box = "ubuntu/bionic64"
-    computeSlice2.vm.hostname = 'computeSlice2'
-    computeSlice2.vm.network "private_network", ip: computeSlice2IP
-    computeSlice2.vm.network "public_network"
-
-    computeSlice2.vm.provider "virtualbox" do |vb|
-      vb.memory = "2048"
-      vb.cpus = "2"
-      #vb.customize [ "modifyvm", :id, "--uartmode1", "disconnected" ]
-    end
-  
-    computeSlice2.vm.provision "shell", inline: <<-SHELL
-      echo "[NECOS] git cloning necos.git"
-      git clone -b andre https://github.com/dcomp-leris/necos.git --quiet
-      if [ $? -ne 0 ]; then echo "[NECOS] error"; fi
-      chown -R vagrant.vagrant necos
-
-      echo "[NECOS] apt upgrading"
-      bash necos/vagrant/apt.sh
-
-      echo "[NECOS] making /etc/hosts"
-      bash necos/vagrant/makeHosts.sh controllerSlice2IP computeSlice2IP
-
-      echo "[NECOS] installing chrony"
-      bash necos/vagrant/chrony-client.sh
-
-      echo "[NECOS] installing nova"
-      bash necos/vagrant/nova-compute.sh computeSlice2IP passwordSlice2
-
-      echo "[NECOS] installing neutron"
-      bash necos/vagrant/neutron-compute.sh computeSlice2IP passwordSlice2
-
-      echo "[NECOS] installing ceilometer"
-      bash necos/vagrant/ceilometer-compute.sh passwordSlice2
-
-      echo "[NECOS] moving log files"
-      bash necos/vagrant/move.sh
-    SHELL
-  end
-############### end compute Slice 2 block ###############
 end

@@ -8,7 +8,7 @@
         echo "export OS_IDENTITY_API_VERSION=3"
         echo "export OS_IMAGE_API_VERSION=2"
         echo "export OS_AUTH_TYPE=password"
-} > admin-openrc
+} >> admin-openrc
 
 {
         echo "export OS_PROJECT_DOMAIN_NAME=Default"
@@ -20,4 +20,4 @@
         echo "export OS_IDENTITY_API_VERSION=3"
         echo "export OS_IMAGE_API_VERSION=2"
         echo "export OS_AUTH_TYPE=password"
-} > demo-openrc
+} >> demo-openrc
