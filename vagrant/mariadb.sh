@@ -1,7 +1,7 @@
 sudo apt -qy install mariadb-server >> apt-mariadb.log 2>> apt-mariadb-error.log
 sudo apt -qy install python-pymysql >> apt-pymysql.log 2>> apt-pymysql-error.log
 
-touch /etc/mysql/mariadb.conf.d/99-openstack.cnf
+#sudo touch /etc/mysql/mariadb.conf.d/99-openstack.cnf
 
 sudo tee -a /etc/mysql/mariadb.conf.d/99-openstack.cnf 1>/dev/null <<_EOF_
 [mysqld]

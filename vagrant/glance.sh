@@ -54,6 +54,9 @@ sudo sed -i "$[linhadeploy2+1] i\flavor = keystone" /etc/glance/glance-registry.
 
 sudo su -s /bin/sh -c "glance-manage db_sync" glance >> glance.log 2>> glance-error.log
 
+sudo sed -i "s/^\[oslo/#\[oslo/" /etc/glance/glance-api.conf
+sudo sed -i "s/^\[oslo/#\[oslo/" /etc/glance/glance-registry.conf
+
 sudo service glance-registry restart
 if [ $? -ne 0 ]; then echo "NECOS: error"; fi
 sudo service glance-api restart
