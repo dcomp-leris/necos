@@ -19,7 +19,6 @@ sudo sed -i "s/sqlite:\/\/\/\/var\/lib\/neutron\/neutron.sqlite/mysql+pymysql:\/
 
 linhadefaultneutron=`sudo awk '{if ($0 == "[DEFAULT]") {print NR;}}' /etc/neutron/neutron.conf`
 sudo sed -i "$[linhadefaultneutron+2] i\service_plugins = router" /etc/neutron/neutron.conf
-sudo sed -i "$[linhadefaultneutron+3] i\core_plugin = ml2" /etc/neutron/neutron.conf
 sudo sed -i "$[linhadefaultneutron+4] i\allow_overlapping_ips = true" /etc/neutron/neutron.conf
 sudo sed -i "$[linhadefaultneutron+5] i\transport_url = rabbit://openstack:$2@controller" /etc/neutron/neutron.conf
 sudo sed -i "$[linhadefaultneutron+6] i\auth_strategy = keystone" /etc/neutron/neutron.conf

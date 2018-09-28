@@ -109,7 +109,7 @@ Vagrant.configure("2") do |config|
       bash necos/vagrant/makeHosts.sh $1 $2
 
       echo "[NECOS] making openrc files"
-      bash necos/vagrant/makingOpenrc.sh $3
+      bash necos/vagrant/makeOpenrcFiles.sh $3
 
       echo "[NECOS] installing chrony"
       bash necos/vagrant/chrony-client.sh
