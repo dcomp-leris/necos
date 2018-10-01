@@ -1,6 +1,9 @@
 #sudo apt -qy install nova-common >> apt-nova-common.log 2>> apt-nova-common-error.log
 sudo apt -qy install nova-compute >> apt-nova-compute.log 2>> apt-nova-compute-error.log
 
+
+sudo sed -i 's/kvm/qemu/' /etc/nova/nova-compute.conf
+
 linhadefaultnova=`sudo awk '{if ($0 == "[DEFAULT]") {print NR;}}' /etc/nova/nova.conf`
 sudo sed -i "$[linhadefaultnova+4] i\transport_url = rabbit://openstack:$2@controller" /etc/nova/nova.conf
 sudo sed -i "$[linhadefaultnova+5] i\my_ip = $1" /etc/nova/nova.conf
@@ -45,8 +48,9 @@ sudo sed -i "$[linhaplacementnova+8] i\password = $2" /etc/nova/nova.conf
 
 #sudo sed -i 's/^enable = False/#enable = False/' /etc/nova/nova.conf
 
-sudo chmod 777 /etc/nova/nova-compute.conf
-sudo sed -i 's/kvm/qemu/' /etc/nova/nova-compute.conf
+
+source necos/vagrant/admin-openrc
+openstack flavor create m1.tiny --id 'auto' --ram 1024 --disk 1 --vcpus 1
 
 sudo service nova-compute restart
 if [ $? -ne 0 ]; then echo "NECOS: error"; fi
