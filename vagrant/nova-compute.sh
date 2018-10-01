@@ -45,7 +45,7 @@ sudo sed -i "$[linhaplacementnova+8] i\password = $2" /etc/nova/nova.conf
 
 #sudo sed -i 's/^enable = False/#enable = False/' /etc/nova/nova.conf
 
-sudo chmod 640 /etc/nova/nova-compute.conf
+sudo chmod 777 /etc/nova/nova-compute.conf
 sudo sed -i 's/kvm/qemu/' /etc/nova/nova-compute.conf
 
 sudo service nova-compute restart
