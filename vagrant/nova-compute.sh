@@ -50,7 +50,7 @@ sudo sed -i "$[linhaplacementnova+8] i\password = $2" /etc/nova/nova.conf
 
 
 source necos/vagrant/admin-openrc
-openstack flavor create m1.tiny --id 'auto' --ram 1024 --disk 1 --vcpus 1
+openstack flavor create m1.tiny --id 'auto' --ram 1024 --disk 1 --vcpus 1 >> flavor.log 2>> flavor-error.log
 
 sudo service nova-compute restart
 if [ $? -ne 0 ]; then echo "NECOS: error"; fi
