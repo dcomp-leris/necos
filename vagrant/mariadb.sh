@@ -5,7 +5,7 @@ sudo apt -qy install python-pymysql >> apt-pymysql.log 2>> apt-pymysql-error.log
 
 sudo tee -a /etc/mysql/mariadb.conf.d/99-openstack.cnf 1>/dev/null <<_EOF_
 [mysqld]
-bind-address = 10.0.0.11
+bind-address = $1
 
 default-storage-engine = innodb
 innodb_file_per_table = on
