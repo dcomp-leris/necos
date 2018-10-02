@@ -15,16 +15,21 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "shell", inline: <<-SHELL
     echo "[NECOS-Kubernetes] Starting Installation :)"
-    echo "[NECOS-Kubernetes] git cloning necos.git"
+    echo "[NECOS-Kubernetes] Cloning Git..."
     git clone https://github.com/dcomp-leris/necos.git --quiet
     if [ $? -ne 0 ]; then echo "[NECOS] error"; fi
     chown -R vagrant.vagrant necos
 
-    echo "[NECOS-Kubernetes] apt upgrading"
+    echo "[NECOS-Kubernetes] Upgrading System..."
     bash necos/vagrantK8s/apt.sh
+    
+    echo "[NECOS-Kubernetes] Install Docker..."
+    bash necos/vagrantK8s/docker.sh   
 
-    echo "[NECOS-Kubernetes] moving log files"
-    bash necos/vagrantK8s/move.sh
     echo "[NECOS-Kubernetes] Finishing Installation :D"
+
+    echo "[NECOS-Kubernetes] Moving Log Files."
+    bash necos/vagrantK8s/move.sh
+    
   SHELL
 end
