@@ -13,8 +13,8 @@
 {
         echo "export OS_PROJECT_DOMAIN_NAME=Default"
         echo "export OS_USER_DOMAIN_NAME=Default"
-        echo "export OS_PROJECT_NAME=demo"
-        echo "export OS_USERNAME=demo"
+        echo "export OS_PROJECT_NAME=myproject"
+        echo "export OS_USERNAME=myuser"
         echo "export OS_PASSWORD=$1"
         echo "export OS_AUTH_URL=http://controller:5000/v3"  
         echo "export OS_IDENTITY_API_VERSION=3"
