@@ -33,8 +33,8 @@ sudo apt -qy install nova-api nova-conductor nova-novncproxy nova-scheduler nova
 sudo sed -i "s/sqlite:\/\/\/\/var\/lib\/nova\/nova_api.sqlite/mysql+pymysql:\/\/nova:$2@controller\/nova_api/" /etc/nova/nova.conf
 sudo sed -i "s/sqlite:\/\/\/\/var\/lib\/nova\/nova.sqlite/mysql+pymysql:\/\/nova:$2@controller\/nova/" /etc/nova/nova.conf
 
-sudo echo "[placement_database]" >> /etc/nova/nova.conf
-sudo echo "connection = mysql+pymysql://placement:$2@controller/placement" >> /etc/nova/nova.conf
+linhaplacementdatabase=`sudo awk '{if ($0 == "[placement_database]") {print NR;}}' /etc/nova/nova.conf`
+sudo sed -i "$[linhaplacementdatabase+1] i\connection = mysql+pymysql://placement:$2@controller/placement" /etc/nova/nova.conf
 
 linhadefaultnova=`sudo awk '{if ($0 == "[DEFAULT]") {print NR;}}' /etc/nova/nova.conf`
 sudo sed -i "$[linhadefaultnova+4] i\transport_url = rabbit://openstack:$2@controller" /etc/nova/nova.conf
