@@ -1,0 +1,133 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+#Configuration Variables !
+controllerSlice1IP = "10.0.0.11"
+computeSlice1IP = "10.0.0.31"
+networkSlice1 = "10.0.0.0"
+passwordSlice1 = "secret"
+controllerSlice2IP = "11.0.0.11"
+computeSlice2IP = "11.0.0.31"
+networkSlice2 = "11.0.0.0"
+passwordSlice2 = "secret"
+numberEnv = "2"
+
+ENV["LC_ALL"] = "en_US.UTF-8"
+
+Vagrant.configure("2") do |config|
+############### start controller block ###############
+  config.vm.define "controllerSlice1" do |controllerSlice1|
+    controllerSlice1.vm.box = "ubuntu/bionic64"
+    controllerSlice1.vm.hostname = 'controllerSlice1'
+    controllerSlice1.vm.network "private_network", ip: controllerSlice1IP
+    controllerSlice1.vm.network "public_network"
+
+    controllerSlice1.vm.provider "virtualbox" do |vb|
+      vb.memory = "6144"
+      vb.cpus = "2"
+      #vb.customize [ "modifyvm", :id, "--uartmode1", "disconnected" ]
+    end
+  
+    controllerSlice1.vm.provision "shell", args: [controllerSlice1IP, computeSlice1IP, passwordSlice1, networkSlice1], inline: <<-SHELL
+      echo "[NECOS] git cloning necos.git"
+      git clone -b andre https://github.com/dcomp-leris/necos.git --quiet
+      if [ $? -ne 0 ]; then echo "[NECOS] error"; fi
+      chown -R vagrant.vagrant necos
+
+      echo "[NECOS] apt upgrading"
+      bash necos/vagrant/apt.sh
+
+      echo "[NECOS] making /etc/hosts"
+      bash necos/vagrant/makeHosts.sh $1 $2
+
+      echo "[NECOS] making openrc files"
+      bash necos/vagrant/makeOpenrcFiles.sh $3
+
+      echo "[NECOS] installing chrony"
+      bash necos/vagrant/chrony.sh $4
+
+      echo "[NECOS] installing mariadb"
+      bash necos/vagrant/mariadb.sh $1 $3
+
+      echo "[NECOS] installing rabbitmq"
+      bash necos/vagrant/rabbitmq.sh $3
+
+      echo "[NECOS] installing memcached"
+      bash necos/vagrant/memcached.sh $1
+
+      echo "[NECOS] installing etcd"
+      bash necos/vagrant/etcd.sh $1
+
+      echo "[NECOS] installing keystone"
+      bash necos/vagrant/keystone.sh $3
+
+      echo "[NECOS] installing glance"
+      bash necos/vagrant/glance.sh $3
+
+      echo "[NECOS] installing nova"
+      bash necos/vagrant/nova.sh $1 $3
+
+      echo "[NECOS] installing neutron"
+      bash necos/vagrant/neutron.sh $1 $3
+
+      echo "[NECOS] installing horizon"
+      bash necos/vagrant/horizon.sh
+
+      #echo "[NECOS] installing gnocchi"
+      #bash necos/vagrant/gnocchi.sh $1 $3
+
+      #echo "[NECOS] installing ceilometer"
+      #bash necos/vagrant/ceilometer.sh $3
+
+      echo "[NECOS] moving log files"
+      bash necos/vagrant/move.sh
+    SHELL
+  end
+############### end controller block ###############
+
+############### start computeSlice1 block ###############
+  config.vm.define "computeSlice1" do |computeSlice1|
+    computeSlice1.vm.box = "ubuntu/bionic64"
+    computeSlice1.vm.hostname = 'computeSlice1'
+    computeSlice1.vm.network "private_network", ip: computeSlice1IP
+    computeSlice1.vm.network "public_network"
+
+    computeSlice1.vm.provider "virtualbox" do |vb|
+      vb.memory = "2048"
+      vb.cpus = "2"
+      #vb.customize [ "modifyvm", :id, "--uartmode1", "disconnected" ]
+    end
+  
+    computeSlice1.vm.provision "shell", args: [controllerSlice1IP, computeSlice1IP, passwordSlice1], inline: <<-SHELL
+      echo "[NECOS] git cloning necos.git"
+      git clone -b andre https://github.com/dcomp-leris/necos.git --quiet
+      if [ $? -ne 0 ]; then echo "[NECOS] error"; fi
+      chown -R vagrant.vagrant necos
+
+      echo "[NECOS] apt upgrading"
+      bash necos/vagrant/apt.sh
+
+      echo "[NECOS] making /etc/hosts"
+      bash necos/vagrant/makeHosts.sh $1 $2
+
+      echo "[NECOS] making openrc files"
+      bash necos/vagrant/makeOpenrcFiles.sh $3
+
+      echo "[NECOS] installing chrony"
+      bash necos/vagrant/chrony-client.sh
+
+      echo "[NECOS] installing nova"
+      bash necos/vagrant/nova-compute.sh $2 $3
+
+      echo "[NECOS] installing neutron"
+      bash necos/vagrant/neutron-compute.sh $2 $3
+
+      #echo "[NECOS] installing ceilometer"
+      #bash necos/vagrant/ceilometer-compute.sh $3
+
+      echo "[NECOS] moving log files"
+      bash necos/vagrant/move.sh
+    SHELL
+  end
+############### end compute Slice 1 block ###############
+end

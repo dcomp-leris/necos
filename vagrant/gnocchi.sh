@@ -1,8 +1,8 @@
 source necos/vagrant/admin-openrc
 
-openstack user create --domain default --password secret ceilometer >> ceilometer.log 2>> ceilometer-error.log
+openstack user create --domain default --password $2 ceilometer >> ceilometer.log 2>> ceilometer-error.log
 openstack role add --project service --user ceilometer admin >> ceilometer.log 2>> ceilometer-error.log
-openstack user create --domain default --password secret gnocchi >> ceilometer.log 2>> ceilometer-error.log
+openstack user create --domain default --password $2 gnocchi >> ceilometer.log 2>> ceilometer-error.log
 openstack service create --name gnocchi --description "Metric Service" metric >> ceilometer.log 2>> ceilometer-error.log
 openstack role add --project service --user gnocchi admin >> ceilometer.log 2>> ceilometer-error.log
 openstack endpoint create --region RegionOne metric public http://controller:8041 >> ceilometer.log 2>> ceilometer-error.log
@@ -12,7 +12,7 @@ openstack endpoint create --region RegionOne metric admin http://controller:8041
 sudo apt -qy install redis >> apt-redis.log 2>> apt-redis-error.log
 
 sudo chmod 755 /etc/redis/redis.conf
-sudo sed -i 's/bind 127.0.0.1 ::1/bind 10.0.0.11 ::1/' /etc/redis/redis.conf
+sudo sed -i "s/bind 127.0.0.1 ::1/bind $1/" /etc/redis/redis.conf
 sudo service redis restart
 
 
@@ -23,10 +23,10 @@ sudo pip install gnocchi[mysql,redis,keystone,prometheus] >> apt-gnocchi.log 2>>
 sudo pip install gnocchiclient >> apt-gnocchi.log 2>> apt-gnocchi-error.log
 
 
-sudo mysql -uroot -psecret <<_EOF_
+sudo mysql -uroot -p$2 <<_EOF_
 CREATE DATABASE gnocchi;
-GRANT ALL PRIVILEGES ON gnocchi.* TO 'gnocchi'@'localhost' IDENTIFIED BY 'secret';
-GRANT ALL PRIVILEGES ON gnocchi.* TO 'gnocchi'@'%' IDENTIFIED BY 'secret';
+GRANT ALL PRIVILEGES ON gnocchi.* TO 'gnocchi'@'localhost' IDENTIFIED BY '$2';
+GRANT ALL PRIVILEGES ON gnocchi.* TO 'gnocchi'@'%' IDENTIFIED BY '$2';
 _EOF_
 
 sudo mkdir /etc/gnocchi
@@ -44,11 +44,11 @@ sudo sed -i "$[linhaauthtokengnocchi+4] i\project_domain_name = Default" /etc/gn
 sudo sed -i "$[linhaauthtokengnocchi+5] i\user_domain_name = Default" /etc/gnocchi/gnocchi.conf
 sudo sed -i "$[linhaauthtokengnocchi+6] i\project_name = service" /etc/gnocchi/gnocchi.conf
 sudo sed -i "$[linhaauthtokengnocchi+7] i\username = gnocchi" /etc/gnocchi/gnocchi.conf
-sudo sed -i "$[linhaauthtokengnocchi+8] i\password = secret" /etc/gnocchi/gnocchi.conf
+sudo sed -i "$[linhaauthtokengnocchi+8] i\password = $2" /etc/gnocchi/gnocchi.conf
 sudo sed -i "$[linhaauthtokengnocchi+9] i\interface = internalURL" /etc/gnocchi/gnocchi.conf
 sudo sed -i "$[linhaauthtokengnocchi+10] i\region_name = RegionOne" /etc/gnocchi/gnocchi.conf
 
-sudo sed -i 's*#url = <None>*url = mysql+pymysql://gnocchi:secret@controller/gnocchi*' /etc/gnocchi/gnocchi.conf
+sudo sed -i "s*#url = <None>*url = mysql+pymysql://gnocchi:$2@controller/gnocchi*" /etc/gnocchi/gnocchi.conf
 
 linhastoragegnocchi=`sudo awk '{if ($0 == "[storage]") {print NR;}}' /etc/gnocchi/gnocchi.conf`
 sudo sed -i "$[linhastoragegnocchi+1] i\file_basepath = /var/lib/gnocchi" /etc/gnocchi/gnocchi.conf
@@ -88,5 +88,6 @@ _EOF_
 
 sudo ln -s /etc/init.d/gnocchi-api /etc/rc3.d/S99gnocchi-metricd
 
-gnocchi-api & >> gnocchi-api.log 2>>gnocchi-api-error.log
-gnocchi-metricd & >> gnocchi-metricd.log 2>>gnocchi-metricd-error.log
+
+gnocchi-api --noverbose --log-file gnocchi-api2.log2 --config-file /etc/gnocchi/gnocchi.conf >> gnocchi-api.log 2>> gnocchi-api-error.log &
+gnocchi-metricd --noverbose --log-file gnocchi-metricd2.log2 --config-file /etc/gnocchi/gnocchi.conf >> gnocchi-metricd.log 2>> gnocchi-metricd-error.log &

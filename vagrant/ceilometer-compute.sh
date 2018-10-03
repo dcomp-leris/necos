@@ -2,7 +2,7 @@ sudo apt -qy install ceilometer-agent-compute >> apt-ceilometer-compute.log 2>> 
 #sudo apt -qy install ceilometer-agent-ipmi >> apt-ceilometer-ipmi.log 2>> apt-ceilometer-ipmi-error.log
 
 linhadefaultceilometer=`sudo awk '{if ($0 == "[DEFAULT]") {print NR;}}' /etc/ceilometer/ceilometer.conf`
-sudo sed -i "$[linhadefaultceilometer+1] i\transport_url = rabbit://openstack:secret@controller" /etc/ceilometer/ceilometer.conf
+sudo sed -i "$[linhadefaultceilometer+1] i\transport_url = rabbit://openstack:$1@controller" /etc/ceilometer/ceilometer.conf
 
 linhacredentialsceilometer=`sudo awk '{if ($0 == "[service_credentials]") {print NR;}}' /etc/ceilometer/ceilometer.conf`
 sudo sed -i "$[linhacredentialsceilometer+1] i\auth_url = http://controller:5000" /etc/ceilometer/ceilometer.conf
@@ -11,7 +11,7 @@ sudo sed -i "$[linhacredentialsceilometer+3] i\user_domain_id = default" /etc/ce
 sudo sed -i "$[linhacredentialsceilometer+4] i\auth_type = password" /etc/ceilometer/ceilometer.conf
 sudo sed -i "$[linhacredentialsceilometer+5] i\username = ceilometer" /etc/ceilometer/ceilometer.conf
 sudo sed -i "$[linhacredentialsceilometer+6] i\project_name = service" /etc/ceilometer/ceilometer.conf
-sudo sed -i "$[linhacredentialsceilometer+7] i\password = secret" /etc/ceilometer/ceilometer.conf
+sudo sed -i "$[linhacredentialsceilometer+7] i\password = $1" /etc/ceilometer/ceilometer.conf
 sudo sed -i "$[linhacredentialsceilometer+8] i\interface = internalURL" /etc/ceilometer/ceilometer.conf
 sudo sed -i "$[linhacredentialsceilometer+9] i\region_name = RegionOne" /etc/ceilometer/ceilometer.conf
 

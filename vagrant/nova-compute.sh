@@ -1,17 +1,19 @@
-sudo apt -qy install nova-common >> apt-nova-common.log 2>> apt-nova-common-error.log
+#sudo apt -qy install nova-common >> apt-nova-common.log 2>> apt-nova-common-error.log
 sudo apt -qy install nova-compute >> apt-nova-compute.log 2>> apt-nova-compute-error.log
 
-HOST_IP=$1
+
+sudo sed -i 's/kvm/qemu/' /etc/nova/nova-compute.conf
+
 linhadefaultnova=`sudo awk '{if ($0 == "[DEFAULT]") {print NR;}}' /etc/nova/nova.conf`
-sudo sed -i "$[linhadefaultnova+4] i\transport_url = rabbit://openstack:secret@controller" /etc/nova/nova.conf
-sudo sed -i "$[linhadefaultnova+5] i\my_ip = ${HOST_IP}" /etc/nova/nova.conf
-sudo sed -i "$[linhadefaultnova+6] i\use_neutron = True" /etc/nova/nova.conf
+sudo sed -i "$[linhadefaultnova+4] i\transport_url = rabbit://openstack:$2@controller" /etc/nova/nova.conf
+sudo sed -i "$[linhadefaultnova+5] i\my_ip = $1" /etc/nova/nova.conf
+sudo sed -i "$[linhadefaultnova+6] i\use_neutron = true" /etc/nova/nova.conf
 sudo sed -i "$[linhadefaultnova+7] i\firewall_driver = nova.virt.firewall.NoopFirewallDriver" /etc/nova/nova.conf
 
 linhavncnova=`sudo awk '{if ($0 == "[vnc]") {print NR;}}' /etc/nova/nova.conf`
-sudo sed -i "$[linhavncnova+1] i\enabled = True" /etc/nova/nova.conf
+sudo sed -i "$[linhavncnova+1] i\enabled = true" /etc/nova/nova.conf
 sudo sed -i "$[linhavncnova+2] i\server_listen = 0.0.0.0" /etc/nova/nova.conf
-sudo sed -i "$[linhavncnova+3] i\server_proxyclient_address = ${HOST_IP}" /etc/nova/nova.conf
+sudo sed -i "$[linhavncnova+3] i\server_proxyclient_address = $1" /etc/nova/nova.conf
 sudo sed -i "$[linhavncnova+4] i\snovncproxy_base_url = http://controller:6080/vnc_auto.html" /etc/nova/nova.conf
 
 sudo sed -i 's/#auth_strategy = keystone/auth_strategy = keystone/' /etc/nova/nova.conf
@@ -24,7 +26,7 @@ sudo sed -i "$[linhaauthtokennova+4] i\project_domain_name = default" /etc/nova/
 sudo sed -i "$[linhaauthtokennova+5] i\user_domain_name = default" /etc/nova/nova.conf
 sudo sed -i "$[linhaauthtokennova+6] i\project_name = service" /etc/nova/nova.conf
 sudo sed -i "$[linhaauthtokennova+7] i\username = nova" /etc/nova/nova.conf
-sudo sed -i "$[linhaauthtokennova+8] i\password = secret" /etc/nova/nova.conf
+sudo sed -i "$[linhaauthtokennova+8] i\password = $2" /etc/nova/nova.conf
 
 linhaglancenova=`sudo awk '{if ($0 == "[glance]") {print NR;}}' /etc/nova/nova.conf`
 sudo sed -i "$[linhaglancenova+1] i\api_servers = http://controller:9292" /etc/nova/nova.conf
@@ -42,11 +44,13 @@ sudo sed -i "$[linhaplacementnova+4] i\auth_type = password" /etc/nova/nova.conf
 sudo sed -i "$[linhaplacementnova+5] i\user_domain_name = Default" /etc/nova/nova.conf
 sudo sed -i "$[linhaplacementnova+6] i\auth_url = http://controller:5000/v3" /etc/nova/nova.conf
 sudo sed -i "$[linhaplacementnova+7] i\username = placement" /etc/nova/nova.conf
-sudo sed -i "$[linhaplacementnova+8] i\password = secret" /etc/nova/nova.conf
+sudo sed -i "$[linhaplacementnova+8] i\password = $2" /etc/nova/nova.conf
 
-sudo sed -i 's/^enable = False/#enable = False/' /etc/nova/nova.conf
+#sudo sed -i 's/^enable = False/#enable = False/' /etc/nova/nova.conf
 
-sudo sed -i 's/kvm/qemu/' /etc/nova/nova-compute.conf
+
+source necos/vagrant/admin-openrc
+openstack flavor create m1.tiny --id 'auto' --ram 1024 --disk 1 --vcpus 1 >> flavor.log 2>> flavor-error.log
 
 sudo service nova-compute restart
 if [ $? -ne 0 ]; then echo "NECOS: error"; fi
