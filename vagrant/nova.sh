@@ -28,8 +28,7 @@ openstack endpoint create --region RegionOne placement public http://controller:
 openstack endpoint create --region RegionOne placement internal http://controller:8778 >> nova.log 2>> nova-error.log
 openstack endpoint create --region RegionOne placement admin http://controller:8778 >> nova.log 2>> nova-error.log
 
-
-sudo apt -qy install nova-api nova-conductor nova-consoleauth nova-novncproxy nova-scheduler nova-placement-api >> apt-nova.log 2>> apt-nova-error.log
+sudo apt -qy install nova-api nova-conductor nova-novncproxy nova-scheduler nova-placement-api >> apt-nova.log 2>> apt-nova-error.log
 
 sudo sed -i "s/sqlite:\/\/\/\/var\/lib\/nova\/nova_api.sqlite/mysql+pymysql:\/\/nova:$2@controller\/nova_api/" /etc/nova/nova.conf
 sudo sed -i "s/sqlite:\/\/\/\/var\/lib\/nova\/nova.sqlite/mysql+pymysql:\/\/nova:$2@controller\/nova/" /etc/nova/nova.conf
@@ -93,6 +92,10 @@ sudo su -s /bin/sh -c "nova-manage cell_v2 create_cell --name=cell1 --verbose" n
 sudo su -s /bin/sh -c "nova-manage db sync" nova >> nova-manage.log 2>> nova-manage-error.log
 
 sudo service nova-api restart
+if [ $? -ne 0 ]; then echo "NECOS: error"; fi
 sudo service nova-scheduler restart
+if [ $? -ne 0 ]; then echo "NECOS: error"; fi
 sudo service nova-conductor restart
+if [ $? -ne 0 ]; then echo "NECOS: error"; fi
 sudo service nova-novncproxy restart
+if [ $? -ne 0 ]; then echo "NECOS: error"; fi
