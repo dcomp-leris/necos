@@ -18,13 +18,12 @@ sudo apt -qy install neutron-server neutron-plugin-ml2 neutron-linuxbridge-agent
 sudo sed -i "s/sqlite:\/\/\/\/var\/lib\/neutron\/neutron.sqlite/mysql+pymysql:\/\/neutron:$2@controller\/neutron/" /etc/neutron/neutron.conf
 
 linhadefaultneutron=`sudo awk '{if ($0 == "[DEFAULT]") {print NR;}}' /etc/neutron/neutron.conf`
-sudo sed -i "$[linhadefaultneutron+2] i\core_plugin = ml2" /etc/neutron/neutron.conf
-sudo sed -i "$[linhadefaultneutron+3] i\service_plugins = router" /etc/neutron/neutron.conf
-sudo sed -i "$[linhadefaultneutron+4] i\allow_overlapping_ips = true" /etc/neutron/neutron.conf
-sudo sed -i "$[linhadefaultneutron+5] i\transport_url = rabbit://openstack:$2@controller" /etc/neutron/neutron.conf
-sudo sed -i "$[linhadefaultneutron+6] i\auth_strategy = keystone" /etc/neutron/neutron.conf
-sudo sed -i "$[linhadefaultneutron+7] i\notify_nova_on_port_status_changes = true" /etc/neutron/neutron.conf
-sudo sed -i "$[linhadefaultneutron+8] i\notify_nova_on_port_data_changes = true" /etc/neutron/neutron.conf
+sudo sed -i "$[linhadefaultneutron+2] i\service_plugins = router" /etc/neutron/neutron.conf
+sudo sed -i "$[linhadefaultneutron+3] i\allow_overlapping_ips = true" /etc/neutron/neutron.conf
+sudo sed -i "$[linhadefaultneutron+4] i\transport_url = rabbit://openstack:$2@controller" /etc/neutron/neutron.conf
+sudo sed -i "$[linhadefaultneutron+5] i\auth_strategy = keystone" /etc/neutron/neutron.conf
+sudo sed -i "$[linhadefaultneutron+6] i\notify_nova_on_port_status_changes = true" /etc/neutron/neutron.conf
+sudo sed -i "$[linhadefaultneutron+7] i\notify_nova_on_port_data_changes = true" /etc/neutron/neutron.conf
 
 linhaauthtokenneutron=`sudo awk '{if ($0 == "[keystone_authtoken]") {print NR;}}' /etc/neutron/neutron.conf`
 sudo sed -i "$[linhaauthtokenneutron+1] i\www_authenticate_uri = http://controller:5000" /etc/neutron/neutron.conf
