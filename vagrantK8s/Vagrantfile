@@ -25,6 +25,9 @@ Vagrant.configure("2") do |config|
   
       echo "[NECOS-Minikube] Upgrading System..."
       bash necos/vagrantK8s/apt.sh
+
+      echo "[NECOS-Minikube] Installing Docker..."
+      bash necos/vagrantK8s/docker.sh
       
       echo "[NECOS-Minikube] Installing Minikube..."
       bash necos/vagrantK8s/minikube.sh
