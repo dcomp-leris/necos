@@ -8,3 +8,8 @@ sudo apt -qy update
 
 sudo apt -qy install docker-ce
 
+sudo groupadd docker
+
+sudo usermod -aG docker $USER
+
+echo "Reinicie a máquina!!!"
