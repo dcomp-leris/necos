@@ -24,12 +24,12 @@ Vagrant.configure("2") do |config|
       chown -R vagrant.vagrant necos
   
       echo "[NECOS-swarm] Upgrading System..."
-      bash necos/vagrantK8s/apt.sh
+      bash necos/vagrantSwarm/apt.sh
 
       echo "[NECOS-swarm] Finishing Installation :D"
   
       echo "[NECOS-swarm] Moving Log Files."
-      bash necos/vagrantK8s/move.sh
+      bash necos/vagrantSwarm/move.sh
       
     SHELL
   end
