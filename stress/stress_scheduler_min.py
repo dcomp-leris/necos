@@ -18,7 +18,7 @@ def job():
 	print(time.localtime().tm_hour,':', time.localtime().tm_min)
 
 schedule.every(60).minutes.do(job)
-
+job()
 while 1:
 	schedule.run_pending()
 	time.sleep(1)
