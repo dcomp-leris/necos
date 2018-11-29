@@ -5,15 +5,15 @@ def job():
 	print("I'm working...")
 	if hour % 3 == 0:
 		print("Slow...")
-		os.system('stress -c 2 -i 1 -m 1 --vm-bytes 128M -t 50m & \iperf3 -c speedtest.wtnet.de -p 5201 -t 3000 -b 10M')
+		os.system('stress -c 2 -i 1 -m 1 --vm-bytes 128M -t 50m & \iperf3 -c 200.136.191.117 -p 5000 -t 3000 -b 10M')
 
 	if hour % 3 == 1:
 		print("Medium...")
-		os.system('stress -c 2 -i 1 -m 1 --vm-bytes 512M -t 50m & \iperf3 -c speedtest.wtnet.de -p 5201 -t 3000 -b 100M')
+		os.system('stress -c 2 -i 1 -m 1 --vm-bytes 512M -t 50m & \iperf3 -c 200.136.191.117 -p 5000 -t 3000 -b 100M')
 
 	if hour % 3 == 2:
 		print("Hard...")
-		os.system('stress -c 2 -i 1 -m 1 --vm-bytes 1024M -t 50m & \iperf3 -c speedtest.wtnet.de -p 5201 -t 3000 -b 1G')
+		os.system('stress -c 2 -i 1 -m 1 --vm-bytes 1024M -t 50m & \iperf3 -c 200.136.191.117 -p 5000 -t 3000 -b 1G')
 
 	print(time.localtime().tm_hour,':', time.localtime().tm_min)
 
