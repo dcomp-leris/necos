@@ -36,5 +36,5 @@ RUN \
   apt-get -y install stress && \
   apt-get -y install git && \
   git clone https://github.com/dcomp-leris/necos.git
-ENTRYPOINT python3 necos/stress/stress_scheduler_min.py
+ENTRYPOINT python3 necos/stress/stress_min.py
 '''
