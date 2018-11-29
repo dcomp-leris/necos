@@ -3,20 +3,20 @@ import subprocess, os, sys, time
 def job():
 	print("I'm working...")
 	while 1:
-  	hour = time.localtime().tm_hour
-    if hour % 3 == 0:
-	  	print("Slow...")
-		  os.system('stress -c 2 -i 1 -m 1 --vm-bytes 128M -t 60m & \iperf -c 200.136.191.117 -p 5000 -t 3600 -b 10M')
-      sleep(3600)
-  	if hour % 3 == 1:
-	  	print("Medium...")
-		  os.system('stress -c 2 -i 1 -m 1 --vm-bytes 512M -t 60m & \iperf -c 200.136.191.117 -p 5000 -t 3600 -b 100M')
-      sleep(3600)
-  	if hour % 3 == 2:
-	  	print("Hard...")
-		  os.system('stress -c 2 -i 1 -m 1 --vm-bytes 1024M -t 60m & \iperf -c 200.136.191.117 -p 5000 -t 3600 -b 1G')
-      sleep(3600)
-  	print(time.localtime().tm_hour,':', time.localtime().tm_min)
+  		hour = time.localtime().tm_hour
+    	if hour % 3 == 0:
+	  		print("Slow...")
+			os.system('stress -c 2 -i 1 -m 1 --vm-bytes 128M -t 60m & \iperf -c 200.136.191.117 -p 5000 -t 3600 -b 10M')
+      		sleep(3600)
+  		if hour % 3 == 1:
+	  		print("Medium...")
+		  	os.system('stress -c 2 -i 1 -m 1 --vm-bytes 512M -t 60m & \iperf -c 200.136.191.117 -p 5000 -t 3600 -b 100M')
+      		sleep(3600)
+  		if hour % 3 == 2:
+	  		print("Hard...")
+		  	os.system('stress -c 2 -i 1 -m 1 --vm-bytes 1024M -t 60m & \iperf -c 200.136.191.117 -p 5000 -t 3600 -b 1G')
+      		sleep(3600)
+  		print(time.localtime().tm_hour,':', time.localtime().tm_min)
 
 job()
 
