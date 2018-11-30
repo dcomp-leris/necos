@@ -1,28 +1,28 @@
-import schedule, subprocess, os, sys, time
+import schedule, subprocess, os, sys, time, random
 
-def job():
+def job(profile):
 	hour = time.localtime().tm_hour
 	print("I'm working...")
-	if hour % 3 == 0:
+	
+	if profile == 0:
 		print("Slow...")
-		os.system('stress -c 2 -i 1 -m 1 --vm-bytes 128M -t 60m & \iperf -c 200.136.191.117 -p 5000 -t 3600 -b 10M')
+		os.system('stress-ng -c 1 -l 15% --io 1 --hdd-bytes 10m --vm 1 --vm-bytes 10% -t 10m & \iperf -c 200.136.191.117 -p 5000 -t 600 -b 10K')
 
-	if hour % 3 == 1:
+	if profile == 1:
 		print("Medium...")
-		os.system('stress -c 2 -i 1 -m 1 --vm-bytes 512M -t 60m & \iperf -c 200.136.191.117 -p 5000 -t 3600 -b 100M')
+		os.system('stress-ng -c 1 -l 40% -d 1 --hdd-bytes 10m --vm 1 --vm-bytes 40% -t 10m & \iperf -c 200.136.191.117 -p 5000 -t 600 -b 1M')
 
-	if hour % 3 == 2:
+	if profile == 2:
 		print("Hard...")
-		os.system('stress -c 2 -i 1 -m 1 --vm-bytes 1024M -t 60m & \iperf -c 200.136.191.117 -p 5000 -t 3600 -b 1G')
+		os.system('stress-ng -c 1 -l 80% -d 1 --hdd-bytes 100m --vm 1 --vm-bytes 80% -t 10m & \iperf -c 200.136.191.117 -p 5000 -t 600 -b 50M')
 
 	print(time.localtime().tm_hour,':', time.localtime().tm_min)
 
-schedule.every(60).minutes.do(job)
-job()
-while 1:
-	schedule.run_pending()
-	time.sleep(1)
-
+i = 0
+while i < 3:
+	job(i)
+	time.sleep(600)
+	i += 1
 '''
 FROM ubuntu:latest
 RUN \
@@ -36,6 +36,7 @@ RUN \
   apt-get -y install iperf3 && \
   apt-get -y install iperf &&\
   apt-get -y install stress && \
+  apt-get -y install stress-ng && \
   apt-get -y install git && \
   git clone https://github.com/dcomp-leris/necos.git
 
