@@ -21,7 +21,6 @@ def job(profile):
 i = 0
 while i < 3:
 	job(i)
-	time.sleep(600)
 	i += 1
 '''
 FROM ubuntu:latest
